@@ -24,6 +24,19 @@
 - `docs/aivora-github-project-model.md`
 - `docs/project-origin.md`
 - `docs/launch-checklist.md`
+- `docs/paid-ai-report.md`
+
+## AI 详细报告
+
+前端已经预留“19.9 元 AI 详细报告”入口。实现方式是：
+
+1. Aivora 商品卖一次性兑换码。
+2. 用户在工具页输入兑换码。
+3. 前端请求 `/api/sleep-report`。
+4. Cloudflare Worker 校验兑换码并调用 Anthropic-compatible API。
+5. AI 返回详细 Markdown 报告。
+
+后端代码在 `worker/`。API Key 只能通过 `wrangler secret put ANTHROPIC_API_KEY` 设置到 Cloudflare Worker，不能写进前端、README、GitHub Actions 或任何提交文件。
 
 ## 本地预览
 

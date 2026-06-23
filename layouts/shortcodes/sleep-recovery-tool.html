@@ -356,6 +356,60 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     }
 
+    .sleep-ai {
+      display: grid;
+      gap: .72rem;
+      margin-top: .95rem;
+      padding: .9rem;
+      border: 1px solid rgba(15, 118, 110, .16);
+      border-radius: 8px;
+      background: #f7fbf9;
+    }
+
+    .sleep-ai__title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 850;
+      line-height: 1.35;
+    }
+
+    .sleep-ai__text {
+      margin: 0;
+      color: var(--sleep-muted);
+      font-size: .86rem;
+      line-height: 1.65;
+    }
+
+    .sleep-ai__row {
+      display: grid;
+      grid-template-columns: minmax(180px, .9fr) auto auto;
+      gap: .55rem;
+      align-items: center;
+    }
+
+    .sleep-ai input {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--sleep-line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--sleep-ink);
+      padding: .55rem .65rem;
+      font-size: .96rem;
+    }
+
+    .sleep-ai__status {
+      min-height: 1.4rem;
+      color: var(--sleep-muted);
+      font-size: .84rem;
+      line-height: 1.55;
+    }
+
+    .sleep-ai__output {
+      min-height: 300px;
+      background: #fffef8 !important;
+    }
+
     .sleep-tool__commerce-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -407,8 +461,10 @@
     html.dark .sleep-tool__result,
     html.dark .sleep-tool__commerce,
     html.dark .sleep-tool__notice,
+    html.dark .sleep-ai,
     html.dark .sleep-module,
     html.dark .sleep-offer,
+    html.dark .sleep-ai input,
     html.dark .sleep-field input[type="number"],
     html.dark .sleep-tool textarea,
     html.dark .sleep-score,
@@ -447,6 +503,7 @@
 
       .sleep-tool__fields,
       .sleep-module-grid,
+      .sleep-ai__row,
       .sleep-score {
         grid-template-columns: 1fr;
       }
@@ -465,6 +522,7 @@
       .sleep-tool__panel,
       .sleep-tool__commerce,
       .sleep-tool__actions,
+      .sleep-ai,
       .sleep-tool__notice {
         display: none !important;
       }
@@ -636,6 +694,20 @@
 
       <ul class="sleep-plan" data-plan></ul>
       <textarea data-report readonly aria-label="可复制的睡眠恢复报告"></textarea>
+
+      <div class="sleep-ai">
+        <div>
+          <h4 class="sleep-ai__title">19.9 元 AI 详细报告</h4>
+          <p class="sleep-ai__text">购买后输入兑换码，AI 会基于上面的数据和简版报告生成一份更完整的 Markdown 解读。密钥只在后端 Worker 使用，前端不会保存你的 API Key。</p>
+        </div>
+        <div class="sleep-ai__row">
+          <input data-ai-code type="text" autocomplete="off" placeholder="输入报告兑换码，例如 SR-20260623-0001" aria-label="报告兑换码">
+          <button class="sleep-button sleep-button--primary" type="button" data-action="ai-report">生成 AI 详细报告</button>
+          <button class="sleep-button sleep-button--muted" type="button" data-action="copy-ai">复制详细报告</button>
+        </div>
+        <div class="sleep-ai__status" data-ai-status>接口准备好后，兑换码会在 Aivora 商品购买后自动发放。</div>
+        <textarea class="sleep-ai__output" data-ai-output readonly aria-label="AI 详细睡眠恢复报告"></textarea>
+      </div>
     </div>
   </div>
 
@@ -909,12 +981,67 @@
 
       const copyReport = async (root) => {
         const report = root.querySelector("[data-report]");
+        await copyText(report.value, report);
+      };
+
+      const copyAiReport = async (root) => {
+        const report = root.querySelector("[data-ai-output]");
+        await copyText(report.value, report);
+      };
+
+      const copyText = async (text, fallbackElement) => {
         try {
-          await navigator.clipboard.writeText(report.value);
+          await navigator.clipboard.writeText(text);
         } catch (error) {
-          report.focus();
-          report.select();
+          fallbackElement.focus();
+          fallbackElement.select();
           document.execCommand("copy");
+        }
+      };
+
+      const generateAiReport = async (root) => {
+        render(root);
+        const codeInput = root.querySelector("[data-ai-code]");
+        const status = root.querySelector("[data-ai-status]");
+        const output = root.querySelector("[data-ai-output]");
+        const button = root.querySelector('[data-action="ai-report"]');
+        const accessCode = codeInput.value.trim();
+
+        if (!accessCode) {
+          status.textContent = "请先输入购买后获得的报告兑换码。";
+          codeInput.focus();
+          return;
+        }
+
+        const endpoint = root.getAttribute("data-ai-endpoint") || "/api/sleep-report";
+        const payload = {
+          accessCode,
+          values: getValues(root),
+          quickReport: root.querySelector("[data-report]").value,
+          source: "sleep-recovery-age-web"
+        };
+
+        button.disabled = true;
+        status.textContent = "AI 正在生成详细报告，通常需要 20 到 60 秒。";
+
+        try {
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || !data.report) {
+            throw new Error(data.error || "AI 报告生成失败，请稍后重试。");
+          }
+          output.value = data.report;
+          status.textContent = "详细报告已生成。你可以复制保存，或继续调整数据后重新购买生成。";
+        } catch (error) {
+          status.textContent = error.message || "AI 报告生成失败，请稍后重试。";
+        } finally {
+          button.disabled = false;
         }
       };
 
@@ -930,6 +1057,8 @@
         root.addEventListener("change", () => render(root));
         root.querySelector('[data-action="calculate"]').addEventListener("click", () => render(root));
         root.querySelector('[data-action="copy"]').addEventListener("click", () => copyReport(root));
+        root.querySelector('[data-action="copy-ai"]').addEventListener("click", () => copyAiReport(root));
+        root.querySelector('[data-action="ai-report"]').addEventListener("click", () => generateAiReport(root));
         root.querySelector('[data-action="print"]').addEventListener("click", () => window.print());
         root.querySelector('[data-action="reset"]').addEventListener("click", () => {
           setValues(root, defaults);
