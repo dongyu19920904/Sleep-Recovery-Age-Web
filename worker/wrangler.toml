@@ -7,10 +7,6 @@ ANTHROPIC_API_URL = "https://cloudcode.bdjd.cc"
 DEFAULT_ANTHROPIC_MODEL = "claude-opus-4-6"
 ALLOWED_ORIGINS = "https://sleep.aivora.cn,http://sleep.aivora.cn,https://dongyu19920904.github.io,http://127.0.0.1:1314,http://localhost:1314"
 
-# Production should use KV for single-use paid report codes.
-# Create the namespace and replace the placeholder before deploying:
-# wrangler kv namespace create SLEEP_REPORT_CODES
-#
-# [[kv_namespaces]]
-# binding = "SLEEP_REPORT_CODES"
-# id = "replace_with_kv_namespace_id"
+[[kv_namespaces]]
+binding = "SLEEP_REPORT_CODES"
+id = "38ec56123c2c4a899c3d56f91818d2f0"

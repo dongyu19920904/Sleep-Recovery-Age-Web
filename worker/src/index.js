@@ -159,7 +159,7 @@ async function validateAccessCode(env, accessCode) {
 
     let record;
     try {
-      record = JSON.parse(raw);
+      record = JSON.parse(raw.replace(/^\uFEFF/, ""));
     } catch {
       throw publicError(500, "兑换码记录格式异常，请联系客服。");
     }
