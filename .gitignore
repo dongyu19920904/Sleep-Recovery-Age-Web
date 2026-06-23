@@ -31,6 +31,9 @@ static/google*.html
 static/*.txt
 !static/llms.txt
 themes/hextra/.github/
+themes/hextra/.gitignore
+themes/hextra/.prettierrc
+themes/hextra/build.sh
 themes/hextra/docs/
 themes/hextra/examples/
 themes/hextra/images/
