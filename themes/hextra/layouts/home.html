@@ -1,0 +1,61 @@
+{{ define "main" }}
+  <div class='hx:mx-auto hx:flex hextra-max-page-width'>
+    {{ partial "sidebar.html" (dict "context" . "disableSidebar" true "displayPlaceholder" true) }}
+    {{ partial "toc.html" . }}
+    <article class="hx:w-full hx:break-words hx:flex hx:min-h-[calc(100vh-var(--navbar-height))] hx:min-w-0 hx:justify-center hx:pb-8 hx:pr-[calc(env(safe-area-inset-right)-1.5rem)]">
+      <main class="bio-home hx:w-full hx:min-w-0 hx:max-w-6xl hx:px-6 hx:pt-4 hx:md:px-12">
+        <section class="bio-cover">
+          <div class="bio-cover__masthead">
+            <span class="bio-cover__eyebrow">Longevity Research Desk</span>
+            {{ if .Title }}<h1 class="bio-cover__title">{{ .Title }}</h1>{{ end }}
+            {{ with .Description }}<p class="bio-cover__text">{{ . }}</p>{{ end }}
+            <div class="bio-cover__actions">
+              <a class="bio-cover__primary" href="#today-bio-issue">阅读今日研究摘要</a>
+              <a class="bio-cover__secondary" href="{{ "/opportunity/" | relLangURL }}">查看 AI 延续学商机</a>
+              <a class="bio-cover__secondary" href="{{ "/project-opportunity/" | relLangURL }}">查看资讯商机</a>
+            </div>
+          </div>
+          <aside class="bio-cover__rail" aria-label="今日研究结构">
+            <div class="bio-rail-card">
+              <span class="bio-rail-card__eyebrow">Research Flow</span>
+              <h2 class="bio-rail-card__title">今天这一期怎么读</h2>
+              <ul class="bio-rail-card__list">
+                <li>先看摘要，快速判断今天最重要的科学方向。</li>
+                <li>再看商机页，判断哪些方向值得继续跟踪。</li>
+                <li>最后看资讯商机，聚焦项目、工具和外部线索。</li>
+              </ul>
+            </div>
+            <div class="bio-rail-card bio-rail-card--accent">
+              <span class="bio-rail-card__eyebrow">Portal Signal</span>
+              <p class="bio-rail-card__text">首页现在更像研究门户封面，而不是单篇文档。日报、商机、资讯项目会在这里形成一张清晰路线图。</p>
+            </div>
+          </aside>
+        </section>
+
+        <section class="bio-quick-grid" aria-label="首页快捷入口">
+          <a class="bio-quick-card bio-quick-card--primary" href="{{ "/" | relLangURL }}">
+            <span class="bio-quick-card__label">Daily</span>
+            <strong class="bio-quick-card__title">AI 延续学日报</strong>
+            <span class="bio-quick-card__text">长寿、衰老、生命科学与 AI 交叉方向的每日摘要。</span>
+          </a>
+          <a class="bio-quick-card" href="{{ "/opportunity/" | relLangURL }}">
+            <span class="bio-quick-card__label">Opportunity</span>
+            <strong class="bio-quick-card__title">AI 延续学商机</strong>
+            <span class="bio-quick-card__text">从研究进展和工具变化里提炼更能落地的机会判断。</span>
+          </a>
+          <a class="bio-quick-card" href="{{ "/project-opportunity/" | relLangURL }}">
+            <span class="bio-quick-card__label">Info Project</span>
+            <strong class="bio-quick-card__title">AI 延续学资讯商机</strong>
+            <span class="bio-quick-card__text">偏项目、资讯线索与外部资源的那条入口。</span>
+          </a>
+        </section>
+
+        <section id="today-bio-issue" class="bio-home__body">
+          <div class="content bio-home__content">
+            {{ .Content }}
+          </div>
+        </section>
+      </main>
+    </article>
+  </div>
+{{ end }}

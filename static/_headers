@@ -1,0 +1,16 @@
+# 允许索引所有内容，并允许 Google 的 AI (Google-Extended)
+# (Allow indexing for all content, and allow Google's AI (Google-Extended))
+/*
+  X-Robots-Tag: googlebot: index, follow
+
+# Cloudflare 用cdn-cgi网址替换了电子邮件地址
+/cdn-cgi/*
+  X-Robots-Tag: noindex
+
+# 分类页面 (Categories Pages)
+/categories/
+  X-Robots-Tag: noindex
+/en/categories/
+  X-Robots-Tag: noindex
+/ja/categories/
+  X-Robots-Tag: noindex

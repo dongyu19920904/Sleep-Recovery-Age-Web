@@ -1,0 +1,104 @@
+# Hugo configuration file
+title: 睡眠恢复年龄观察器
+baseURL: "https://sleep.aivora.cn/"
+
+timezone: Asia/Shanghai
+enableRobotsTXT: true
+enableGitInfo: false
+enableEmoji: false
+hasCJKLanguage: true
+enableInlineShortcodes: true
+
+outputs:
+  home: [html]
+  page: [html]
+  section: [html, rss]
+
+theme: hextra
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+
+menu:
+  main:
+    - identifier: sleep-recovery-age
+      name: 睡眠恢复年龄
+      pageRef: /sleep-recovery-age
+      weight: 1
+    - identifier: opportunity
+      name: 商机日报
+      pageRef: /opportunity
+      weight: 2
+    - identifier: project-opportunity
+      name: 项目雷达
+      pageRef: /project-opportunity
+      weight: 3
+    - identifier: ai-daily
+      name: AI延续学日报
+      weight: 4
+      url: "https://news.aibioo.cn"
+    - identifier: about
+      name: 关于
+      pageRef: /about
+      weight: 5
+    - identifier: search
+      name: 搜索
+      weight: 10
+      params:
+        type: search
+
+params:
+  la51Id: "3OeesViIrmuFMAz4"
+  description: 输入 7 天可穿戴设备和睡眠习惯数据，生成睡眠恢复分、恢复年龄画像、薄弱项和 7 天行动报告。工具只做健康数据观察，不提供医疗诊断或治疗建议。
+  descriptionEn: Sleep recovery age observer for wearable sleep data, recovery scoring, and non-medical action reports.
+  navbar:
+    displayLogo: false
+    displayTitle: true
+
+  author:
+    name: "AI BioAge Toolkit"
+    bio: "睡眠恢复观察、可穿戴数据解读与 AI 延续学商机验证"
+    email: "justlikemaki@qq.com"
+
+  displayUpdatedDate: true
+  dateFormat: "2006/01/02 15:04:05"
+
+  footer:
+    displayCopyright: false
+    displayPoweredBy: false
+
+  blog:
+    list:
+      displayTags: true
+      sortBy: date
+      sortOrder: desc
+      pagerSize: 10
+    article:
+      displayPagination: true
+
+  toc:
+    displayTags: false
+
+  page:
+    width: wide
+
+  search:
+    enable: true
+    type: flexsearch
+    flexsearch:
+      index: content
+
+  comments:
+    enable: false
+
+defaultContentLanguage: zh
+languages:
+  zh:
+    languageCode: zh-CN
+    contentDir: content/cn
+    languageName: 简体中文
+    weight: 1

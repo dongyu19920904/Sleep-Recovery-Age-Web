@@ -1,0 +1,90 @@
+{{ define "main" }}
+  {{ $baseName := "" }}
+  {{ with .File }}
+    {{ $baseName = .BaseFileName }}
+  {{ end }}
+  {{ $isIssue := gt (len (findRE "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" $baseName)) 0 }}
+  {{ $isOpportunity := eq .Section "opportunity" }}
+  {{ $isProjectOpportunity := eq .Section "project-opportunity" }}
+  {{ $isStyledIssue := $isIssue }}
+  {{ $eyebrow := "BioAge Toolkit" }}
+  {{ $sectionBadge := "生物年龄工具导航" }}
+  {{ $secondaryOneLink := "/opportunity/" | relLangURL }}
+  {{ $secondaryOneLabel := "查看资料包商机" }}
+  {{ $secondaryTwoLink := "/project-opportunity/" | relLangURL }}
+  {{ $secondaryTwoLabel := "查看工具项目雷达" }}
+
+  {{ if $isOpportunity }}
+    {{ $eyebrow = "Opportunity Daily" }}
+    {{ $sectionBadge = "资料包商机" }}
+    {{ $secondaryOneLink = "/project-opportunity/" | relLangURL }}
+    {{ $secondaryOneLabel = "查看工具项目雷达" }}
+    {{ $secondaryTwoLink = "/" | relLangURL }}
+    {{ $secondaryTwoLabel = "回到工具导航" }}
+  {{ else if $isProjectOpportunity }}
+    {{ $eyebrow = "Tool Radar" }}
+    {{ $sectionBadge = "工具项目雷达" }}
+    {{ $secondaryOneLink = "/opportunity/" | relLangURL }}
+    {{ $secondaryOneLabel = "查看资料包商机" }}
+    {{ $secondaryTwoLink = "/" | relLangURL }}
+    {{ $secondaryTwoLabel = "回到工具导航" }}
+  {{ end }}
+
+  <div class='hx:mx-auto hx:flex hextra-max-page-width'>
+    {{ partial "sidebar.html" (dict "context" .) }}
+    {{ partial "toc.html" . }}
+    <article class="hx:w-full hx:break-words hx:flex hx:min-h-[calc(100vh-var(--navbar-height))] hx:min-w-0 hx:justify-center hx:pb-8 hx:pr-[calc(env(safe-area-inset-right)-1.5rem)]">
+      {{ if $isStyledIssue }}
+        <main class="bio-doc-page hx:w-full hx:min-w-0 hx:max-w-6xl hx:px-6 hx:pt-4 hx:md:px-12">
+          {{ partial "breadcrumb.html" (dict "page" . "enable" true) }}
+          <section class="bio-doc-masthead {{ if $isOpportunity }}bio-doc-masthead--opportunity{{ else if $isProjectOpportunity }}bio-doc-masthead--project{{ end }}">
+            <div class="bio-doc-masthead__copy">
+              <span class="bio-doc-masthead__eyebrow">{{ $eyebrow }}</span>
+              {{ if .Title }}<h1 class="bio-doc-masthead__title">{{ .Title }}</h1>{{ end }}
+              {{ with .Description }}<p class="bio-doc-masthead__text">{{ . }}</p>{{ end }}
+            </div>
+            <div class="bio-doc-masthead__meta" aria-label="文章信息">
+              <span>{{ $sectionBadge }}</span>
+              {{ if .Date }}<span>{{ .Date.Format "2006-01-02" }}</span>{{ end }}
+              <span>更新于 {{ .Lastmod.Format "2006-01-02 15:04" }}</span>
+            </div>
+            <div class="bio-doc-actions">
+              <a class="bio-doc-actions__primary" href="#issue-content">阅读正文</a>
+              <a class="bio-doc-actions__secondary" href="{{ $secondaryOneLink }}">{{ $secondaryOneLabel }}</a>
+              <a class="bio-doc-actions__secondary" href="{{ $secondaryTwoLink }}">{{ $secondaryTwoLabel }}</a>
+            </div>
+          </section>
+
+          <section id="issue-content" class="bio-doc-shell">
+            <div class="content">
+              {{ .Content }}
+            </div>
+          </section>
+
+          {{ if ne .Section "opportunity" }}
+            {{ partial "custom/ai-opportunity-entry.html" . }}
+          {{ end }}
+          {{ if ne .Section "project-opportunity" }}
+            {{ partial "custom/ai-info-project-entry.html" . }}
+          {{ end }}
+
+          {{ partial "components/last-updated.html" . }}
+          {{ partial "components/pager.html" . }}
+          {{ partial "components/comments.html" . }}
+        </main>
+      {{ else }}
+        <main class="hx:w-full hx:min-w-0 hx:max-w-6xl hx:px-6 hx:pt-4 hx:md:px-12">
+          {{ partial "breadcrumb.html" (dict "page" . "enable" true) }}
+          <div class="content">
+            {{ if .Title }}<h1>{{ .Title }}</h1>{{ end }}
+            {{ .Content }}
+          </div>
+          {{ partial "components/last-updated.html" . }}
+          {{ partial "components/pager.html" . }}
+          {{ partial "components/comments.html" . }}
+        </main>
+      {{ end }}
+    </article>
+  </div>
+{{ end }}
+

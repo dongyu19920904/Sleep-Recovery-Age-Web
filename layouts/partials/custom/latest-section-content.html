@@ -1,0 +1,33 @@
+{{- $pageContext := .page -}}
+{{- $section := .section -}}
+{{- $emptyMessage := .emptyMessage -}}
+{{- $pages := slice -}}
+{{- range $pageContext.Site.RegularPages -}}
+  {{- $base := .File.BaseFileName -}}
+  {{- if and (eq .Section $section) (findRE "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" $base) -}}
+    {{- $pages = $pages | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- $latest := first 1 (sort $pages "File.Path" "desc") -}}
+{{- $eyebrow := cond (eq $section "project-opportunity") "Tool Radar" "Opportunity Daily" -}}
+{{- $introTitle := cond (eq $section "project-opportunity") "最新 AI 生物年龄工具项目" "最新 AI 生物年龄资料包商机" -}}
+{{- $introText := cond (eq $section "project-opportunity") "从 GitHub、论文和新闻里筛项目，优先保留能收藏、试跑、写教程或二次开发的工具线索。" "从生物年龄和抗衰资讯里提炼可低成本验证的资料包、内容选题和社群服务机会。" -}}
+{{- if gt (len $latest) 0 -}}
+  {{- $page := index $latest 0 -}}
+  <div class="latest-section-surface latest-section-surface--{{ $section }}">
+    <div class="latest-section-surface__intro">
+      <div class="latest-section-surface__intro-head">
+        <div>
+          <span class="latest-section-surface__eyebrow">{{ $eyebrow }}</span>
+          <h2 class="latest-section-surface__intro-title">{{ $introTitle }}</h2>
+        </div>
+        <a class="latest-section-surface__jump" href="{{ $page.RelPermalink }}">打开独立页面</a>
+      </div>
+      <p class="latest-section-surface__intro-text">{{ $introText }}</p>
+    </div>
+    {{- $page.Content -}}
+  </div>
+{{- else -}}
+  <p>{{ $emptyMessage }}</p>
+{{- end -}}
+

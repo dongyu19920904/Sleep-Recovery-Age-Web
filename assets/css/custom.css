@@ -1,0 +1,756 @@
+/* =================================================================== */
+/*                      Original User Styles                           */
+/* =================================================================== */
+
+h1:first-of-type {
+  /* display: none; */
+}
+
+code, kbd, samp, pre {
+  font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,liberation mono,courier new,monospace;
+}
+
+.content :where(img):not(:where([class~=not-prose],[class~=not-prose] *)) {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: .375rem;
+  max-width: 100%;
+  min-width: 100%;
+  /* height: clamp(250px, 35vh, 500px);
+  object-fit: cover; */
+}
+
+.content table tbody tr td :where(img):not(:where([class~=not-prose],[class~=not-prose] *)){
+  height: auto;
+}
+
+.content table {
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+  display: table;
+}
+
+video {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: .375rem;
+  max-width: 100%;
+  min-width: 100%;
+}
+
+br {
+    display: block;
+    content: "";
+    margin-top: 20px;
+}
+
+footer .hx-max-w-screen-xl{
+  max-width: 100%;
+}
+
+.footer-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem 0.5rem;
+  width: 100%;
+  flex-direction: column;
+}
+
+.footer-container {
+  text-align: center;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.footer-copyright {
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+.footer-links a,
+.footer-copyright a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.footer-copyright a:is(html[class~=dark] *){
+  color:#a1a8b4;
+}
+
+.footer-links a:hover,
+.footer-copyright a:hover {
+  color: #d8d8d8;
+  text-decoration: underline;
+}
+
+.ad-container,
+.google-auto-placed {
+  text-align: center;
+  max-width: 98%;
+  margin: 1rem auto;
+  overflow: hidden;
+}
+
+.hextra-code-block pre {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.content :where(code):not(:where(.hextra-code-block code,[class~=not-prose],[class~=not-prose] *)) {
+  border-radius: 4px;
+  font-style: normal;
+  padding: 0.2em 0.4em;
+  font-size: 0.875em;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.content blockquote p a {
+    /* display: none; */
+}
+
+.hextra-max-footer-width {
+    max-width: 100%;
+}
+
+/* =================================================================== */
+/*                 [FIX v2] Light Theme Contrast Fix                   */
+/* =================================================================== */
+
+/*
+ * 通过重写 Hextra 主题的根CSS变量来从根本上修复浅色模式的对比度问题。
+ * 这比单独覆盖每个元素的样式更有效、更全面。
+ * :not(.dark) 选择器确保这些规则只在浅色模式下生效。
+*/
+html:not(.dark) {
+  /*
+   * -- 文本颜色修复 --
+   * Hextra 默认的灰色文本（如 --hx-text-gray-600 和 500）在白色背景上对比度不足。
+   * 我们将它们重新定义为更深的颜色。
+  */
+  --hx-text-gray-500: #4a5568;  /* 加深的中灰色 (原: #6b7280) */
+  --hx-text-gray-600: #2d3748;  /* 加深的深灰色 (原: #4b5563) */
+  --hx-text-gray-700: #1a202c;  /* 更深的近黑色 (原: #374151) */
+  --hx-text-gray-900: #111827;  /* 确保标题等为最深的颜色 */
+
+  /*
+   * -- 边框颜色修复 --
+   * 默认的浅灰色边框在白色背景上几乎看不见。
+   * 稍微加深它们可以提高组件的可见性。
+  */
+  --hx-border-gray-200: #d1d5db; /* 加深的浅边框 (原: #e5e7eb) */
+  --hx-border-gray-300: #b5bac0; /* 加深的中边框 (原: #d1d5db) */
+
+  /*
+   * -- 主题链接/焦点色修复 --
+   * 使用青绿色作为 BioAI 生命科学主题色
+  */
+  --primary-hue: 174deg;         /* 青绿色调 - 生命科学 */
+  --primary-saturation: 72%;
+  --primary-lightness: 40%;      /* 浅色模式下稍深一点 */
+}
+
+/* 
+ * -- 行内代码块的再次确认修复 --
+ * 确保 `<code>` 标签即使不使用CSS变量也能有高对比度。
+*/
+html:not(.dark) .content :where(code):not(:where(.hextra-code-block code,[class~=not-prose],[class~=not-prose] *)) {
+  background-color: #eef0f2; /* 一个清晰可见的浅灰色背景 */
+  color: #1a202c;            /* 深色文本，确保可读性 */
+}
+
+
+/* =================================================================== */
+/*                      Dark Theme "BioAI" Style                       */
+/*       生命科学主题：青绿色系 (Teal/Cyan) - DNA双螺旋灵感              */
+/* =================================================================== */
+html.dark {
+  --primary-hue: 174deg;      /* 青绿色调 - 生命科学经典色 */
+  --primary-saturation: 72%;
+  --primary-lightness: 50%;
+}
+
+.hextra-footer:is(html[class~=dark] *),
+.nav-container:is(html[class~=dark] *),
+body:is(html[class~=dark] *) {
+  background-color: #0f1a1a;  /* 深青色背景 */
+}
+
+.nav-container-blur:is(html[class~=dark] *) {
+    background-color: rgba(15, 26, 26, 0.85) !important;
+}
+
+.nav-container a:is(html[class~=dark] *),
+.nav-container svg:is(html[class~=dark] *) {
+  color: #ffffff;
+  transition: color 0.2s ease-in-out;
+}
+
+.nav-container a:hover:is(html[class~=dark] *),
+.nav-container a:hover svg:is(html[class~=dark] *),
+.nav-container button:hover svg:is(html[class~=dark] *) {
+  color: #2dd4bf !important;  /* 青绿色悬停 */
+}
+
+.hamburger-menu:is(html[class~=dark] *) {
+  color: #ffffff;
+}
+.hamburger-menu:hover:is(html[class~=dark] *) {
+  color: #2dd4bf !important;
+}
+
+.content :where(code):not(:where(.hextra-code-block code,[class~=not-prose],[class~=not-prose] *)):is(html[class~=dark] *) {
+  background-color: #1a2e2e;
+  color: #5eead4;  /* 青绿色代码 */
+  border: 1px solid #2d4a4a;
+}
+
+.hextra-code-block pre:is(html[class~=dark] *),
+.hextra-code-block .filename:is(html[class~=dark] *) {
+  background-color: #0a1414;
+  border: 1px solid #2d4a4a;
+}
+
+.hextra-code-block pre code span:is(html[class~=dark] *),
+.hextra-code-block pre code:is(html[class~=dark] *) {
+  font-style: normal !important;
+  color: #f0f0f0;
+}
+
+.dark .highlight .chroma .c, .dark .highlight .chroma .c1, .dark .highlight .chroma .cs { color: #6b8f8f !important; }
+.dark .highlight .chroma .k { color: #f472b6 !important; }  /* 粉色关键字 - DNA碱基色 */
+.dark .highlight .chroma .kc { color: #67e8f9 !important; }
+.dark .highlight .chroma .s, .dark .highlight .chroma .s1, .dark .highlight .chroma .s2 { color: #a5f3fc !important; }
+.dark .highlight .chroma .nc { color: #4ade80 !important; font-weight: 700; }  /* 绿色 - 叶绿素 */
+.dark .highlight .chroma .nf { color: #c4b5fd !important; font-weight: 700; }
+
+.chroma .hl:is(html[class~=dark] *) {
+  background-color: rgba(45, 212, 191, 0.15) !important;
+}
+
+.hextra-code-copy-btn:hover:is(html[class~=dark] *) {
+  background-color: #1a2e2e;
+  color: #2dd4bf;
+}
+
+.content :where(a):not(:where([class~=not-prose],[class~=not-prose] *)):is(html[class~=dark] *),
+.content :where(blockquote):not(:where([class~=not-prose],[class~=not-prose] *)):is(html[class~=dark] *) {
+  color: #2dd4bf;  /* 青绿色链接 */
+  border-left-color: #2dd4bf;
+}
+.content :where(a):not(:where([class~=not-prose],[class~=not-prose] *)):hover:is(html[class~=dark] *) {
+  color: #99f6e4;
+  text-decoration: underline;
+}
+.content :where(h2):not(:where([class~=not-prose],[class~=not-prose] *)):is(html[class~=dark] *) {
+  border-color: #2d4a4a;
+}
+
+.hextra-card:is(html[class~=dark] *) {
+  background-color: #1a2e2e;
+  border: 1px solid #2d4a4a;
+  color: #f0f0f0;
+}
+.hextra-card:hover:is(html[class~=dark] *) {
+  border-color: #2dd4bf;
+  box-shadow: 0 0 15px rgba(45, 212, 191, 0.2);
+}
+
+.hextra-badge:is(html[class~=dark] *) {
+  background-color: #2dd4bf;
+  color: #0f1a1a;
+  font-weight: bold;
+}
+
+.sidebar-active-item:is(html[class~=dark] *) {
+  color: #2dd4bf !important;
+  font-weight: bold;
+  background-color: rgba(45, 212, 191, 0.1);
+  border-radius: 4px;
+}
+.dark\:hover\:hx-bg-primary-100\/5:hover:is(html[class~=dark] *) {
+    background-color: rgba(45, 212, 191, 0.1);
+}
+.sidebar-container a:hover:is(html[class~=dark] *) {
+  color: #2dd4bf;
+}
+.sidebar-container a:is(html[class~=dark] *) {
+  color: #fff;
+}
+
+.search-wrapper li .active:is(html[class~=dark] *) {
+    background-color: rgba(45, 212, 191, 0.15);
+}
+.search-wrapper .match:is(html[class~=dark] *) {
+    color: #2dd4bf;
+}
+.search-input:is(html[class~=dark] *) {
+  border-color: #2d4a4a;
+}
+.search-input:focus:is(html[class~=dark] *) {
+  border-color: #2dd4bf;
+}
+
+.hextra-tabs-toggle[data-state=selected]:is(html[class~=dark] *) {
+  border-bottom: 2px solid #2dd4bf;
+  color: #2dd4bf;
+}
+
+strong:is(html[class~=dark] *) {
+    color: #5eead4;  /* 青绿色强调 */
+    padding: 3px;
+}
+
+.content :where(h3):not(:where([class~=not-prose],[class~=not-prose] *)):is(html[class~=dark] *) {
+    color: #2dd4bf;
+}
+
+/* =================================================================== */
+/*          [FIX v3] Light Theme Footer Contrast Fix               */
+/* =================================================================== */
+
+/*
+ * 目标：专门解决浅色主题下，页脚文本和链接颜色对比度不足的问题。
+ * 原因：页脚的链接颜色被设置为 `inherit`，它继承了 Hextra 主题
+ *      默认的浅灰色 body 文本颜色，导致在白色背景上难以阅读。
+*/
+
+/* 1. 为浅色模式下的整个页脚设置一个高对比度的基础文字颜色 */
+html:not(.dark) .footer-wrapper {
+  /* 使用深石板灰色，它在白色背景上具有非常高的对比度 (11.75:1) */
+  color: #2D3748;
+}
+
+/* 2. 为页脚链接在浅色模式下设置一个清晰的悬停 (hover) 效果 */
+/*    之前的 hover 颜色是为暗色模式设计的，在浅色模式下会看不见 */
+html:not(.dark) .footer-links a:hover,
+html:not(.dark) .footer-copyright a:hover {
+  /* 悬停时变为纯黑色，并保持下划线，提供清晰的视觉反馈 */
+  color: #000000;
+}
+
+/* =================================================================== */
+/*                    BioAI 推广模块样式                                */
+/* =================================================================== */
+
+.aivora-promo-box {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  padding: 1.75rem;
+  border: 2px solid #99f6e4;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* DNA 双螺旋装饰背景 */
+.aivora-promo-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Cpath d='M20 0 Q50 25 80 50 Q50 75 20 100 Q50 125 80 150 Q50 175 20 200' stroke='%2314b8a6' stroke-width='2' fill='none' opacity='0.15'/%3E%3Cpath d='M80 0 Q50 25 20 50 Q50 75 80 100 Q50 125 20 150 Q50 175 80 200' stroke='%2314b8a6' stroke-width='2' fill='none' opacity='0.15'/%3E%3C/svg%3E") repeat-y;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.aivora-promo-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.15), 0 4px 6px -2px rgba(20, 184, 166, 0.1);
+}
+
+.aivora-promo-box h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f766e;
+  letter-spacing: -0.025em;
+}
+
+.aivora-promo-box p {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #115e59;
+}
+
+.aivora-promo-box p:last-of-type {
+  margin-bottom: 1.25rem;
+}
+
+.aivora-promo-box strong {
+  color: #0d9488;
+  font-weight: 600;
+}
+
+.aivora-promo-cta {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.aivora-cta-button {
+  display: inline-block;
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+  color: white;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(20, 184, 166, 0.3), 0 2px 4px -1px rgba(20, 184, 166, 0.2);
+}
+
+.aivora-cta-button:hover {
+  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.4), 0 4px 6px -2px rgba(20, 184, 166, 0.3);
+  color: white;
+  text-decoration: none;
+}
+
+.aivora-cta-button:active {
+  transform: translateY(0);
+}
+
+/* 暗色模式适配 */
+.dark .aivora-promo-box {
+  border-color: #2d4a4a;
+  background: linear-gradient(135deg, #0f1f1f 0%, #0a1a1a 100%);
+}
+
+.dark .aivora-promo-box::before {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Cpath d='M20 0 Q50 25 80 50 Q50 75 20 100 Q50 125 80 150 Q50 175 20 200' stroke='%232dd4bf' stroke-width='2' fill='none' opacity='0.2'/%3E%3Cpath d='M80 0 Q50 25 20 50 Q50 75 80 100 Q50 125 20 150 Q50 175 80 200' stroke='%232dd4bf' stroke-width='2' fill='none' opacity='0.2'/%3E%3C/svg%3E") repeat-y;
+}
+
+.dark .aivora-promo-box h3 {
+  color: #5eead4;
+}
+
+.dark .aivora-promo-box p {
+  color: #99f6e4;
+}
+
+.dark .aivora-promo-box strong {
+  color: #2dd4bf;
+}
+
+/* 产品列表样式 - BioAI 领域卡片 */
+.aivora-products {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.product-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  background: rgba(20, 184, 166, 0.08);
+  border-radius: 8px;
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  transition: all 0.2s ease;
+}
+
+.product-item:hover {
+  background: rgba(20, 184, 166, 0.12);
+  border-color: rgba(20, 184, 166, 0.4);
+  transform: translateY(-2px);
+}
+
+.product-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.product-item strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: inherit;
+}
+
+.product-item small {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.8;
+  line-height: 1.3;
+}
+
+.aivora-features {
+  text-align: center;
+  font-size: 0.9rem;
+  padding: 0.75rem;
+  background: rgba(20, 184, 166, 0.05);
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+/* 暗黑模式适配 */
+.dark .product-item {
+  background: rgba(45, 212, 191, 0.08);
+  border-color: rgba(45, 212, 191, 0.2);
+}
+
+.dark .product-item:hover {
+  background: rgba(45, 212, 191, 0.15);
+  border-color: rgba(45, 212, 191, 0.4);
+}
+
+.dark .aivora-features {
+  background: rgba(45, 212, 191, 0.08);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .aivora-products {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .aivora-promo-box {
+    padding: 1.25rem;
+    margin-top: 2rem;
+  }
+  
+  .aivora-promo-box h3 {
+    font-size: 1.25rem;
+  }
+  
+  .aivora-cta-button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .product-item {
+    padding: 0.75rem;
+  }
+  
+  .product-icon {
+    font-size: 1.25rem;
+  }
+  
+  .product-item strong {
+    font-size: 0.875rem;
+  }
+  
+  .product-item small {
+    font-size: 0.75rem;
+  }
+}
+
+/* =================================================================== */
+/*                     BioAI 板块样式优化                               */
+/* =================================================================== */
+
+/* 生物医药/基因编辑板块 - 生命科学风格 */
+.content h2[id*="生物医药"],
+.content h2[id*="基因编辑"],
+.content h2[id*="bioai"],
+.content h2[id*="蛋白质"] {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+  border-left: 4px solid #14b8a6;
+  border-radius: 8px;
+  color: #0f766e;
+  font-size: 1.5rem;
+}
+
+.dark .content h2[id*="生物医药"],
+.dark .content h2[id*="基因编辑"],
+.dark .content h2[id*="bioai"],
+.dark .content h2[id*="蛋白质"] {
+  background: linear-gradient(135deg, #0f1f1f 0%, #0a2a2a 100%);
+  border-left-color: #2dd4bf;
+  color: #5eead4;
+}
+
+/* AI趣闻板块 - 轻松幽默风格 */
+.content h2[id*="ai趣闻"],
+.content h2[id*="趣闻"] {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border-left: 4px solid #10b981;
+  border-radius: 8px;
+  color: #065f46;
+  font-size: 1.5rem;
+}
+
+.dark .content h2[id*="ai趣闻"],
+.dark .content h2[id*="趣闻"] {
+  background: linear-gradient(135deg, #0f1f1a 0%, #0a2a1f 100%);
+  border-left-color: #34d399;
+  color: #6ee7b7;
+}
+
+/* AI趣闻内容区域 - 下一个 h2 之前的所有内容 */
+.content h2[id*="ai趣闻"] ~ *:not(h2),
+.content h2[id*="趣闻"] ~ *:not(h2) {
+  padding-left: 1rem;
+}
+
+/* AI趋势预测板块 - 专业可信风格 */
+.content h2[id*="ai趋势预测"],
+.content h2[id*="趋势预测"],
+.content h2[id*="前沿研究"],
+.content h2[id*="学术论文"] {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-left: 4px solid #0891b2;
+  border-radius: 8px;
+  color: #164e63;
+  font-size: 1.5rem;
+}
+
+.dark .content h2[id*="ai趋势预测"],
+.dark .content h2[id*="趋势预测"],
+.dark .content h2[id*="前沿研究"],
+.dark .content h2[id*="学术论文"] {
+  background: linear-gradient(135deg, #0f1a2e 0%, #0a1f3d 100%);
+  border-left-color: #22d3ee;
+  color: #67e8f9;
+}
+
+/* 趋势预测项（h3）样式 */
+.content h2[id*="ai趋势预测"] ~ h3,
+.content h2[id*="趋势预测"] ~ h3,
+.content h2[id*="前沿研究"] ~ h3,
+.content h2[id*="学术论文"] ~ h3 {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(8, 145, 178, 0.05);
+  border-left: 3px solid #0891b2;
+  border-radius: 4px;
+}
+
+.dark .content h2[id*="ai趋势预测"] ~ h3,
+.dark .content h2[id*="趋势预测"] ~ h3,
+.dark .content h2[id*="前沿研究"] ~ h3,
+.dark .content h2[id*="学术论文"] ~ h3 {
+  background: rgba(34, 211, 238, 0.1);
+  border-left-color: #22d3ee;
+}
+
+/* 今日推荐/药物研发板块 - 转化导向风格 */
+.content h2[id*="今日推荐产品"],
+.content h2[id*="推荐产品"],
+.content h2[id*="药物研发"],
+.content h2[id*="临床试验"] {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%);
+  border-left: 4px solid #a855f7;
+  border-radius: 8px;
+  color: #6b21a8;
+  font-size: 1.5rem;
+}
+
+.dark .content h2[id*="今日推荐产品"],
+.dark .content h2[id*="推荐产品"],
+.dark .content h2[id*="药物研发"],
+.dark .content h2[id*="临床试验"] {
+  background: linear-gradient(135deg, #1a0f2e 0%, #2a1a3d 100%);
+  border-left-color: #c084fc;
+  color: #e9d5ff;
+}
+
+/* 产品推荐表格样式 */
+.content h2[id*="今日推荐产品"] ~ table,
+.content h2[id*="推荐产品"] ~ table {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dark .content h2[id*="今日推荐产品"] ~ table,
+.dark .content h2[id*="推荐产品"] ~ table {
+  border-color: #374151;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.content h2[id*="今日推荐产品"] ~ table th,
+.content h2[id*="推荐产品"] ~ table th {
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  text-align: left;
+  color: #065f46;
+}
+
+.dark .content h2[id*="今日推荐产品"] ~ table th,
+.dark .content h2[id*="推荐产品"] ~ table th {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+.content h2[id*="今日推荐产品"] ~ table td,
+.content h2[id*="推荐产品"] ~ table td {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.dark .content h2[id*="今日推荐产品"] ~ table td,
+.dark .content h2[id*="推荐产品"] ~ table td {
+  border-top-color: #374151;
+}
+
+.content h2[id*="今日推荐产品"] ~ table tr:hover,
+.content h2[id*="推荐产品"] ~ table tr:hover {
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.dark .content h2[id*="今日推荐产品"] ~ table tr:hover,
+.dark .content h2[id*="推荐产品"] ~ table tr:hover {
+  background: rgba(16, 185, 129, 0.15);
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .content h2[id*="ai趣闻"],
+  .content h2[id*="ai趋势预测"],
+  .content h2[id*="今日推荐产品"] {
+    padding: 0.75rem 1rem;
+    font-size: 1.25rem;
+  }
+}

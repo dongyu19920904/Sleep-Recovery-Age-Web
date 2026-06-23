@@ -1,0 +1,43 @@
+{{ define "main" }}
+  {{ $isOpportunitySection := eq .Section "opportunity" }}
+  {{ $isProjectSection := eq .Section "project-opportunity" }}
+  {{ $siblingLink := cond $isOpportunitySection ("/project-opportunity/" | relLangURL) ("/opportunity/" | relLangURL) }}
+  {{ $siblingLabel := cond $isOpportunitySection "查看工具项目雷达" "查看资料包商机" }}
+  {{ if $isProjectSection }}
+    {{ $siblingLink = "/opportunity/" | relLangURL }}
+    {{ $siblingLabel = "查看资料包商机" }}
+  {{ end }}
+
+  <div class='hx:mx-auto hx:flex hextra-max-page-width'>
+    {{ partial "sidebar.html" (dict "context" .) }}
+    {{ partial "toc.html" . }}
+    <article class="hx:w-full hx:break-words hx:flex hx:min-h-[calc(100vh-var(--navbar-height))] hx:min-w-0 hx:justify-center hx:pb-8 hx:pr-[calc(env(safe-area-inset-right)-1.5rem)]">
+      <main class="bio-doc-page hx:w-full hx:min-w-0 hx:max-w-6xl hx:px-6 hx:pt-4 hx:md:px-12">
+        {{ partial "breadcrumb.html" (dict "page" . "enable" true) }}
+        <section class="bio-doc-masthead {{ if $isOpportunitySection }}bio-doc-masthead--opportunity{{ else if $isProjectSection }}bio-doc-masthead--project{{ end }}">
+          <div class="bio-doc-masthead__copy">
+            <span class="bio-doc-masthead__eyebrow">{{ cond $isProjectSection "Tool Radar" "Opportunity Daily" }}</span>
+            {{ if .Title }}<h1 class="bio-doc-masthead__title">{{ .Title }}</h1>{{ end }}
+            {{ with .Description }}<p class="bio-doc-masthead__text">{{ . }}</p>{{ end }}
+          </div>
+          <div class="bio-doc-actions">
+            <a class="bio-doc-actions__primary" href="#section-content">查看最新内容</a>
+            <a class="bio-doc-actions__secondary" href="{{ $siblingLink }}">{{ $siblingLabel }}</a>
+            <a class="bio-doc-actions__secondary" href="{{ "/" | relLangURL }}">回到工具导航</a>
+          </div>
+        </section>
+
+        <section id="section-content" class="bio-doc-shell">
+          <div class="content">
+            {{ .Content }}
+          </div>
+        </section>
+
+        {{ partial "components/last-updated.html" . }}
+        {{ partial "components/pager.html" . }}
+        {{ partial "components/comments.html" . }}
+      </main>
+    </article>
+  </div>
+{{ end }}
+

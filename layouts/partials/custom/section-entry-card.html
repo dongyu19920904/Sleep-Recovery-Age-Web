@@ -1,0 +1,53 @@
+{{- $pageContext := .page -}}
+{{- $section := .section -}}
+{{- $pages := slice -}}
+{{- range $pageContext.Site.RegularPages -}}
+  {{- $base := .File.BaseFileName -}}
+  {{- if and (eq .Section $section) (findRE "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" $base) -}}
+    {{- $pages = $pages | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- $latest := first 1 (sort $pages "File.Path" "desc") -}}
+{{- $entryLink := .defaultLink -}}
+{{- $entryTitle := .defaultTitle -}}
+{{- $entryText := .defaultText -}}
+{{- if gt (len $latest) 0 -}}
+  {{- $latestPage := index $latest 0 -}}
+  {{- $entryLink = $latestPage.RelPermalink -}}
+  {{- $entryTitle = printf "最新一期：%s" $latestPage.Title -}}
+  {{- with $latestPage.Description -}}
+    {{- $entryText = . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $signalText := cond (eq $section "project-opportunity") "Tool Radar" "Opportunity Daily" -}}
+{{- $headlineText := cond (eq $section "project-opportunity") "把外部项目线索整理成可试跑工具入口" "把生物年龄研究线索转成可落地的小生意判断" -}}
+{{- $metaOne := cond (eq $section "project-opportunity") "项目线索" "研究线索" -}}
+{{- $metaTwo := cond (eq $section "project-opportunity") "试跑入口" "机会判断" -}}
+{{- $metaThree := "每日更新" -}}
+
+<aside class="section-entry-card hx:mt-8 hx:rounded-[1.75rem] hx:border hx:p-4 {{ .borderClass }} {{ .bgClass }}" aria-label="{{ .ariaLabel }}">
+  <div class="section-entry-card__header">
+    <div>
+      <div class="section-entry-card__eyebrow {{ .badgeClass }}">{{ .badgeText }}</div>
+      <h2 class="section-entry-card__headline">{{ $headlineText }}</h2>
+    </div>
+    <div class="section-entry-card__signal">{{ $signalText }}</div>
+  </div>
+  <div class="section-entry-card__body">
+    <div class="section-entry-card__copy">
+      <h3 class="section-entry-card__title">{{ $entryTitle }}</h3>
+      <p class="section-entry-card__text">{{ $entryText }}</p>
+      <div class="section-entry-card__meta" aria-hidden="true">
+        <span>{{ $metaOne }}</span>
+        <span>{{ $metaTwo }}</span>
+        <span>{{ $metaThree }}</span>
+      </div>
+    </div>
+    <a class="section-entry-card__button hx:inline-flex hx:items-center hx:justify-center hx:rounded-2xl hx:px-4 hx:py-2.5 hx:text-sm hx:font-medium hx:text-white {{ .buttonClass }}" href="{{ $entryLink }}">
+      <span>{{ .buttonLabel }}</span>
+      <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</aside>
+

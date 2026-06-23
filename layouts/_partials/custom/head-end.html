@@ -1,0 +1,1221 @@
+<meta name="referrer" content="no-referrer-when-downgrade">
+<meta name="twitter:site" content="@justlikemaki">
+<meta name="twitter:image" content="{{ .Site.BaseURL }}/images/logo-dark.png">
+<meta name="og:image" content="{{ .Site.BaseURL }}/images/logo-dark.png">
+
+{{ if .Params.robots }}
+  <meta name="robots" content="{{ .Params.robots }}">
+{{ end }}
+
+{{ if .IsTranslated }}
+  {{ range .AllTranslations }}
+    <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" />
+  {{ end }}
+{{ end }}
+
+{{- if .Site.Params.adsenseId -}}
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{- .Site.Params.adsenseId | safeJS -}}" crossorigin="anonymous"></script>
+{{- end -}}
+
+{{- if site.Params.la51Id -}}
+<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script>LA.init({id:"{{- site.Params.la51Id | safeJS -}}",ck:"{{- site.Params.la51Id | safeJS -}}",autoTrack:true,hashMode:true})</script>
+{{- end -}}
+
+{{- if .Site.Params.umamiKey -}}
+<script defer src="https://cloud.umami.is/script.js" data-website-id="{{- .Site.Params.umamiKey | safeJS -}}"></script>
+{{- end -}} 
+
+{{- if .Site.Params.ahrefsKey -}}  
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="{{- .Site.Params.ahrefsKey | safeJS -}}" async></script>
+{{- end -}} 
+
+{{/* 只有在配置文件中设置了 clarityID 时，才输出这段脚本 */}}
+{{- if .Site.Params.clarityID -}}    
+<script type="text/javascript">
+// Clarity Analytics Script
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "{{- .Site.Params.clarityID | safeJS -}}");    
+</script>    
+{{- end -}}   
+
+
+<!-- 广告屏蔽器弹窗已移除 - 爱窝啦品牌版本 -->
+
+<script>
+
+// 这是一个自定义脚本，用于处理特定的页面逻辑和功能
+var $jscomp=$jscomp||{};$jscomp.scope={};$jscomp.createTemplateTagFirstArg=function(a){return a.raw=a};$jscomp.createTemplateTagFirstArgWithRaw=function(a,b){a.raw=b;return a};
+(function(){var a=window.location.href,b=window.location.pathname;"justlovemaki.github.io"===window.location.hostname&&b.startsWith("/Hextra-AI-Insight-Daily/")&&(b="https://ai.hubtoday.app/"+b.substring(40)+window.location.search+window.location.hash,console.log("Original URL: "+a),console.log("Redirecting to: "+b),window.location.replace(b))})();
+ 
+// 这是一个自定义脚本，用于处理侧边栏菜单的点击阻止逻辑
+document.addEventListener('DOMContentLoaded', function() {
+
+    /**
+     * 为指定的侧边栏菜单应用点击阻止逻辑。
+     * @param {string} selector - 目标 <ul> 元素的 CSS 选择器。
+     * @param {string} menuType - 菜单类型（例如 'Desktop' 或 'Mobile'），用于日志记录。
+     */
+    function applyClickPrevention(selector, menuType) {
+        // 使用提供的选择器查找菜单UL元素
+        // 注意：CSS选择器中的冒号需要用反斜杠转义
+        const menuUl = document.querySelector(selector);
+
+        if (menuUl) {
+            // 选择该UL下所有第一级的<a>标签
+            const firstLevelAnchors = menuUl.querySelectorAll(':scope > li > a');
+            let preventedCount = 0;
+
+            firstLevelAnchors.forEach(anchor => {
+                const parentLi = anchor.closest('li');
+                // 检查这个li内部是否包含一个子菜单（另一个ul）
+                const hasSubmenu = parentLi && parentLi.querySelector('ul');
+
+                // **仅当存在子菜单时**，才阻止链接的默认导航行为
+                if (hasSubmenu) {
+                    anchor.addEventListener('click', function(event) {
+                        // 阻止链接的默认导航行为
+                        event.preventDefault();
+                        console.log(`[${menuType}] Default navigation prevented for:`, anchor.href);
+
+                        // 切换父级li的 'open' 类以展开/折叠子菜单
+                        if (parentLi) {
+                            parentLi.classList.toggle('open');
+                            console.log(`[${menuType}] ${parentLi.classList.contains('open') ? 'Opened' : 'Closed'} submenu for:`, anchor.textContent.trim());
+                        }
+                    });
+                    preventedCount++;
+                }
+            });
+
+            console.log(`[${menuType}] Added click prevention to ${preventedCount} first-level <a> tags with submenus in '${selector}'.`);
+        } else {
+            console.warn(`[${menuType}] The specified UL ('${selector}') was not found.`);
+        }
+    }
+
+    // --- 主逻辑 ---
+
+    // 1. 定义桌面端菜单的选择器（转义冒号，使 querySelector 能匹配类名中包含冒号的 Tailwind-like 类）
+    const desktopMenuSelector = 'ul.hx\\:flex.hx\\:flex-col.hx\\:gap-1.hx\\:max-md\\:hidden'; 
+
+    // 2. 定义移动端菜单的选择器
+    // 通常，移动端菜单的类与桌面端相反（例如，在md及以上屏幕隐藏）
+    // !!! 请根据你的HTML结构检查并确认这个选择器是正确的 !!!
+    const mobileMenuSelector = 'ul.hx\\:flex.hx\\:flex-col.hx\\:gap-1.hx\\:md\\:hidden'; 
+
+    // 3. 分别为桌面和移动端菜单应用逻辑
+    applyClickPrevention(desktopMenuSelector, 'Desktop Menu');
+    applyClickPrevention(mobileMenuSelector, 'Mobile Menu');
+
+});
+
+// 在页面加载完成后执行时间标签本地化
+document.addEventListener('DOMContentLoaded', function() {
+     // 1. 获取所有 <time> 元素
+    const timeElements = document.querySelectorAll('time');
+
+    // 2. 遍历每个元素
+    timeElements.forEach(timeEl => {
+        // 3. 获取 UTC 时间字符串
+        const utcDateTime = timeEl.getAttribute('datetime');
+        if (!utcDateTime) {
+            return; // 跳过没有 datetime 属性的标签
+        }
+
+        // 4. 创建 Date 对象
+        const dateObj = new Date(utcDateTime);
+        if (isNaN(dateObj.getTime())) {
+            return; // 跳过无效的日期
+        }
+
+        // 5. 转换为本地化字符串并更新内容
+        // toLocaleString() 会自动处理时区偏移
+        timeEl.textContent = dateObj.toLocaleString();
+    });
+});
+
+</script>
+
+<style>
+html:not(.dark) .nav-container,
+html:not(.dark) .nav-container-blur {
+  background: rgba(245, 253, 251, 0.88) !important;
+  backdrop-filter: blur(16px) saturate(1.15);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+  border-bottom: 1px solid rgba(13, 148, 136, 0.08);
+}
+
+html:not(.dark) .nav-container a,
+html:not(.dark) .nav-container svg {
+  color: #16302d;
+}
+
+html:not(.dark) .nav-container a:hover,
+html:not(.dark) .nav-container a:hover svg,
+html:not(.dark) .nav-container button:hover svg {
+  color: #0f766e !important;
+}
+
+.section-entry-card {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 24px 58px -46px rgba(15, 23, 42, 0.36);
+}
+
+.section-entry-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 28%);
+  pointer-events: none;
+}
+
+.section-entry-card__header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.9rem;
+}
+
+.section-entry-card__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.38rem 0.82rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.section-entry-card__signal {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.68);
+  padding: 0.3rem 0.72rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+.section-entry-card__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.1rem;
+}
+
+.section-entry-card__copy {
+  max-width: 48rem;
+}
+
+.section-entry-card__title {
+  margin: 0;
+  font-size: clamp(1.2rem, 2vw, 1.48rem);
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.section-entry-card__text {
+  margin: 0.58rem 0 0;
+  line-height: 1.8;
+  color: #334155;
+}
+
+.section-entry-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+}
+
+.section-entry-card__meta span {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 0.3rem 0.72rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #0f766e;
+}
+
+.section-entry-card__button {
+  gap: 0.55rem;
+  flex-shrink: 0;
+  text-decoration: none !important;
+  box-shadow: 0 16px 30px -24px rgba(15, 23, 42, 0.3);
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.24s ease;
+}
+
+.section-entry-card__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px -24px rgba(15, 23, 42, 0.38);
+}
+
+.latest-section-surface {
+  margin: 1.45rem 0 2rem;
+  padding: clamp(1.1rem, 2vw, 1.6rem);
+  border-radius: 1.6rem;
+  border: 1px solid rgba(45, 212, 191, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(240, 253, 250, 0.96)),
+    #ffffff;
+  box-shadow: 0 28px 70px -56px rgba(15, 23, 42, 0.42);
+}
+
+.latest-section-surface--opportunity {
+  background:
+    radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(236, 253, 245, 0.96)),
+    #ffffff;
+}
+
+.latest-section-surface--project-opportunity {
+  background:
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 251, 235, 0.96)),
+    #ffffff;
+}
+
+.latest-section-surface > h1:first-child {
+  margin-top: 0.15rem;
+  margin-bottom: 1rem;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  color: #0f172a;
+}
+
+.latest-section-surface h2 {
+  margin-top: 2.25rem;
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(15, 118, 110, 0.12);
+  font-size: clamp(1.22rem, 2.3vw, 1.55rem);
+  letter-spacing: -0.02em;
+}
+
+.latest-section-surface h3 {
+  margin-top: 1.4rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.02rem;
+}
+
+.latest-section-surface p,
+.latest-section-surface li {
+  line-height: 1.9;
+}
+
+.latest-section-surface blockquote {
+  border-left: 3px solid rgba(13, 148, 136, 0.34);
+  background: rgba(255, 255, 255, 0.76);
+  border-radius: 1rem;
+  padding: 1rem 1.08rem;
+}
+
+.latest-section-surface img,
+.latest-section-surface video {
+  border-radius: 1rem;
+  box-shadow: 0 16px 34px -26px rgba(15, 23, 42, 0.4);
+}
+
+.latest-section-surface table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgba(13, 148, 136, 0.12);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.latest-section-surface th {
+  background: rgba(240, 253, 250, 0.92);
+}
+
+.latest-section-surface th,
+.latest-section-surface td {
+  padding: 0.82rem 0.95rem;
+}
+
+html.dark .section-entry-card {
+  box-shadow: 0 30px 68px -54px rgba(0, 0, 0, 0.7);
+}
+
+html.dark .section-entry-card::before {
+  background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.16), transparent 28%);
+}
+
+html.dark .section-entry-card__signal,
+html.dark .section-entry-card__meta span,
+html.dark .section-entry-card__eyebrow {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html.dark .section-entry-card__title {
+  color: #ecfeff;
+}
+
+html.dark .section-entry-card__text {
+  color: #d1fae5;
+}
+
+html.dark .latest-section-surface {
+  border-color: rgba(45, 212, 191, 0.12);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(17, 24, 39, 0.96)),
+    #111827;
+  box-shadow: 0 30px 75px -58px rgba(0, 0, 0, 0.82);
+}
+
+html.dark .latest-section-surface--opportunity {
+  background:
+    radial-gradient(circle at top right, rgba(45, 212, 191, 0.15), transparent 28%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(17, 24, 39, 0.96)),
+    #111827;
+}
+
+html.dark .latest-section-surface--project-opportunity {
+  background:
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.15), transparent 28%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(17, 24, 39, 0.96)),
+    #111827;
+}
+
+html.dark .latest-section-surface > h1:first-child {
+  color: #ecfeff;
+}
+
+html.dark .latest-section-surface h2 {
+  border-top-color: rgba(45, 212, 191, 0.12);
+}
+
+html.dark .latest-section-surface blockquote {
+  border-left-color: rgba(45, 212, 191, 0.34);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+html.dark .latest-section-surface table {
+  border-color: rgba(45, 212, 191, 0.12);
+}
+
+html.dark .latest-section-surface th {
+  background: rgba(45, 212, 191, 0.08);
+}
+
+@media (max-width: 768px) {
+  .section-entry-card__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .section-entry-card__body {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .section-entry-card__button {
+    width: 100%;
+  }
+
+  .latest-section-surface {
+    padding: 1rem 0.95rem;
+    border-radius: 1.2rem;
+  }
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+.section-entry-card__title,
+.latest-section-surface > h1:first-child,
+.latest-section-surface h2 {
+  text-wrap: balance;
+}
+
+.latest-section-surface time,
+.latest-section-surface .date {
+  font-variant-numeric: tabular-nums;
+}
+
+:is(.section-entry-card__button, .section-entry-card__meta span, .latest-section-surface a) {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-entry-card,
+  .section-entry-card__button,
+  .latest-section-surface,
+  .nav-container,
+  .nav-container-blur {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
+.bio-home {
+  display: grid;
+  gap: 1.35rem;
+  padding-bottom: 2rem;
+}
+
+.bio-cover {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding: clamp(1.1rem, 2.4vw, 1.7rem);
+  border-radius: 2rem;
+  border: 1px solid rgba(20, 184, 166, 0.16);
+  background:
+    radial-gradient(circle at top right, rgba(45, 212, 191, 0.18), transparent 28%),
+    linear-gradient(160deg, rgba(240, 253, 250, 0.98), rgba(255, 255, 255, 0.98));
+  box-shadow: 0 32px 75px -56px rgba(15, 23, 42, 0.46);
+}
+
+.bio-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(15, 118, 110, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 118, 110, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.bio-cover > * {
+  position: relative;
+  z-index: 1;
+}
+
+.bio-cover__masthead {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.bio-cover__eyebrow,
+.latest-section-surface__eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+.bio-cover__title {
+  margin: 0;
+  max-width: 13ch;
+  font-size: clamp(2.2rem, 5vw, 4.1rem);
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+  text-wrap: balance;
+}
+
+.bio-cover__text {
+  max-width: 46rem;
+  font-size: 1rem;
+  line-height: 1.85;
+  color: #475569;
+}
+
+.bio-cover__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 0.2rem;
+}
+
+.bio-cover__primary,
+.bio-cover__secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.85rem 1.2rem;
+  border-radius: 999px;
+  text-decoration: none !important;
+  font-weight: 700;
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.24s ease,
+    background-color 0.24s ease,
+    color 0.24s ease;
+}
+
+.bio-cover__primary {
+  background: linear-gradient(135deg, #0f766e, #0f3f3c);
+  color: #ecfeff !important;
+  box-shadow: 0 18px 34px -24px rgba(15, 118, 110, 0.45);
+}
+
+.bio-cover__secondary {
+  border: 1px solid rgba(15, 118, 110, 0.14);
+  background: rgba(255, 255, 255, 0.74);
+  color: #0f4a44 !important;
+}
+
+.bio-cover__primary:hover,
+.bio-cover__secondary:hover,
+.bio-quick-card:hover,
+.section-entry-card__button:hover {
+  transform: translateY(-2px);
+}
+
+.bio-cover__rail {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.bio-rail-card {
+  border-radius: 1.5rem;
+  border: 1px solid rgba(20, 184, 166, 0.14);
+  background: rgba(255, 255, 255, 0.74);
+  padding: 1rem;
+}
+
+.bio-rail-card--accent {
+  background:
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 32%),
+    rgba(255, 251, 235, 0.92);
+}
+
+.bio-rail-card__eyebrow {
+  display: inline-flex;
+  margin-bottom: 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+.bio-rail-card__title {
+  margin: 0 0 0.7rem;
+  font-size: 1.2rem;
+  letter-spacing: -0.03em;
+}
+
+.bio-rail-card__list {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding-left: 1.15rem;
+  color: #475569;
+}
+
+.bio-rail-card__text {
+  color: #475569;
+  line-height: 1.75;
+}
+
+.bio-quick-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.bio-quick-card {
+  display: grid;
+  gap: 0.24rem;
+  padding: 1.05rem 1.1rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(20, 184, 166, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(240, 253, 250, 0.96)),
+    #ffffff;
+  text-decoration: none !important;
+  box-shadow: 0 20px 48px -38px rgba(15, 23, 42, 0.34);
+  transition:
+    transform 0.24s ease,
+    border-color 0.24s ease,
+    box-shadow 0.24s ease;
+}
+
+.bio-quick-card--primary {
+  background:
+    radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(236, 253, 245, 0.96)),
+    #ffffff;
+}
+
+.bio-quick-card__label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+.bio-quick-card__title {
+  font-size: 1.12rem;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+}
+
+.bio-quick-card__text {
+  color: #475569;
+  line-height: 1.7;
+}
+
+.bio-home__content {
+  margin: 0;
+  padding: clamp(1.1rem, 2vw, 1.55rem);
+  border-radius: 1.9rem;
+  border: 1px solid rgba(20, 184, 166, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(240, 253, 250, 0.96)),
+    #ffffff;
+  box-shadow: 0 28px 72px -56px rgba(15, 23, 42, 0.42);
+}
+
+.bio-home__content > h1:first-child {
+  display: none;
+}
+
+.bio-section-page,
+.bio-doc-page {
+  display: grid;
+  gap: 1.2rem;
+  padding-bottom: 2rem;
+}
+
+.bio-section-hero,
+.bio-doc-masthead,
+.bio-doc-shell {
+  border-radius: 1.9rem;
+  border: 1px solid rgba(20, 184, 166, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(240, 253, 250, 0.96)),
+    #ffffff;
+  box-shadow: 0 28px 72px -56px rgba(15, 23, 42, 0.42);
+}
+
+.bio-section-hero {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.1rem, 2vw, 1.55rem);
+}
+
+.bio-section-hero--project {
+  background:
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 251, 235, 0.96)),
+    #ffffff;
+}
+
+.bio-section-hero__copy,
+.bio-doc-masthead__copy {
+  display: grid;
+  gap: 0.58rem;
+}
+
+.bio-section-hero__eyebrow,
+.bio-doc-masthead__eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+.bio-section-hero__title,
+.bio-doc-masthead__title {
+  margin: 0;
+  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+  color: #0f172a;
+}
+
+.bio-section-hero__text,
+.bio-doc-masthead__text {
+  max-width: 48rem;
+  color: #475569;
+  line-height: 1.82;
+}
+
+.bio-section-hero__actions,
+.bio-doc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.72rem;
+}
+
+.bio-section-hero__primary,
+.bio-section-hero__secondary,
+.bio-doc-actions__primary,
+.bio-doc-actions__secondary,
+.latest-section-surface__jump {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.85rem;
+  padding: 0.78rem 1.1rem;
+  border-radius: 999px;
+  text-decoration: none !important;
+  font-weight: 700;
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.24s ease,
+    background-color 0.24s ease,
+    border-color 0.24s ease,
+    color 0.24s ease;
+}
+
+.bio-section-hero__primary,
+.bio-doc-actions__primary {
+  background: linear-gradient(135deg, #0f766e, #0f3f3c);
+  color: #ecfeff !important;
+  box-shadow: 0 18px 34px -24px rgba(15, 118, 110, 0.45);
+}
+
+.bio-section-hero__secondary,
+.bio-doc-actions__secondary,
+.latest-section-surface__jump {
+  border: 1px solid rgba(15, 118, 110, 0.14);
+  background: rgba(255, 255, 255, 0.76);
+  color: #0f4a44 !important;
+}
+
+.bio-section-hero__primary:hover,
+.bio-section-hero__secondary:hover,
+.bio-doc-actions__primary:hover,
+.bio-doc-actions__secondary:hover,
+.latest-section-surface__jump:hover {
+  transform: translateY(-2px);
+}
+
+.bio-section-hero__pills,
+.bio-doc-masthead__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.bio-section-hero__pills span,
+.bio-doc-masthead__meta span {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+  background: rgba(255, 255, 255, 0.76);
+  padding: 0.34rem 0.74rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+.bio-doc-masthead {
+  display: grid;
+  gap: 0.95rem;
+  padding: clamp(1.1rem, 2vw, 1.55rem);
+}
+
+.bio-doc-masthead--project {
+  background:
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.1), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 251, 235, 0.96)),
+    #ffffff;
+}
+
+.bio-doc-shell {
+  padding: clamp(1.15rem, 2vw, 1.6rem);
+}
+
+.bio-doc-shell--plain {
+  margin-top: 0.35rem;
+}
+
+.bio-doc-shell .content {
+  margin: 0;
+}
+
+.bio-doc-shell .content > h1:first-child {
+  display: none;
+}
+
+.bio-doc-shell .content > *:first-child {
+  margin-top: 0;
+}
+
+.section-entry-card {
+  margin: 1.45rem 0 1.8rem;
+  padding: 1.05rem 1.1rem 1.15rem;
+  border-radius: 1.75rem;
+  box-shadow: 0 26px 64px -50px rgba(15, 23, 42, 0.38);
+}
+
+.section-entry-card__headline {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.3rem, 2.2vw, 1.72rem);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+  color: #0f172a;
+}
+
+.section-entry-card__body {
+  align-items: flex-end;
+}
+
+.section-entry-card__title {
+  font-size: clamp(1.1rem, 1.8vw, 1.42rem);
+  line-height: 1.14;
+  letter-spacing: -0.03em;
+}
+
+.section-entry-card__text {
+  color: #475569;
+}
+
+.section-entry-card__button {
+  min-width: 10rem;
+  background-image: linear-gradient(135deg, #0f766e, #115e59);
+  box-shadow: 0 16px 34px -24px rgba(15, 118, 110, 0.35);
+}
+
+.latest-section-surface {
+  margin: 1.45rem 0 2rem;
+  padding: clamp(1.15rem, 2vw, 1.65rem);
+  border-radius: 1.75rem;
+  box-shadow: 0 30px 75px -58px rgba(15, 23, 42, 0.46);
+}
+
+.latest-section-surface__intro {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 1.15rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(15, 118, 110, 0.12);
+}
+
+.latest-section-surface__intro-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.latest-section-surface__intro-title {
+  margin: 0;
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+
+.latest-section-surface__intro-text {
+  max-width: 42rem;
+  color: #475569;
+  line-height: 1.78;
+}
+
+html.dark .bio-cover {
+  border-color: rgba(45, 212, 191, 0.14);
+  background:
+    radial-gradient(circle at top right, rgba(45, 212, 191, 0.16), transparent 28%),
+    linear-gradient(160deg, rgba(15, 23, 42, 0.98), rgba(17, 24, 39, 0.98));
+}
+
+html.dark .bio-cover::before {
+  background-image:
+    linear-gradient(to right, rgba(45, 212, 191, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(45, 212, 191, 0.08) 1px, transparent 1px);
+}
+
+html.dark .bio-cover__text,
+html.dark .bio-rail-card__text,
+html.dark .bio-rail-card__list,
+html.dark .bio-quick-card__text,
+.dark .bio-section-hero__text,
+.dark .bio-doc-masthead__text,
+html.dark .section-entry-card__text,
+html.dark .latest-section-surface__intro-text {
+  color: #cbd5e1;
+}
+
+html.dark .bio-cover__secondary,
+html.dark .bio-rail-card,
+html.dark .bio-quick-card,
+html.dark .bio-section-hero,
+html.dark .bio-doc-masthead,
+html.dark .bio-doc-shell,
+html.dark .section-entry-card,
+html.dark .latest-section-surface,
+html.dark .bio-home__content {
+  border-color: rgba(45, 212, 191, 0.12);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(17, 24, 39, 0.96)),
+    #111827;
+}
+
+html.dark .bio-quick-card--primary,
+html.dark .bio-section-hero--opportunity,
+html.dark .bio-doc-masthead--opportunity,
+html.dark .latest-section-surface--opportunity {
+  background:
+    radial-gradient(circle at top right, rgba(45, 212, 191, 0.15), transparent 28%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(17, 24, 39, 0.96)),
+    #111827;
+}
+
+html.dark .section-entry-card,
+html.dark .bio-section-hero--project,
+html.dark .bio-doc-masthead--project,
+html.dark .latest-section-surface--project-opportunity {
+  background:
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(17, 24, 39, 0.96)),
+    #111827;
+}
+
+html.dark .bio-cover__title,
+html.dark .bio-rail-card__title,
+html.dark .bio-quick-card__title,
+html.dark .bio-section-hero__title,
+html.dark .bio-doc-masthead__title,
+html.dark .section-entry-card__headline,
+html.dark .latest-section-surface__intro-title {
+  color: #ecfeff;
+}
+
+html.dark .bio-cover__eyebrow,
+html.dark .latest-section-surface__eyebrow,
+html.dark .bio-rail-card__eyebrow,
+html.dark .bio-quick-card__label,
+html.dark .bio-section-hero__eyebrow,
+html.dark .bio-doc-masthead__eyebrow,
+html.dark .section-entry-card__signal,
+html.dark .section-entry-card__meta span,
+html.dark .section-entry-card__eyebrow {
+  color: #5eead4;
+}
+
+html.dark .bio-section-hero__pills span,
+html.dark .bio-doc-masthead__meta span {
+  border-color: rgba(45, 212, 191, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #5eead4;
+}
+
+html.dark .bio-section-hero__secondary,
+html.dark .bio-doc-actions__secondary,
+html.dark .latest-section-surface__jump {
+  border-color: rgba(45, 212, 191, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #d5fffb !important;
+}
+
+html.dark .latest-section-surface__intro {
+  border-bottom-color: rgba(45, 212, 191, 0.12);
+}
+
+@media (min-width: 900px) {
+  .bio-cover {
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+    align-items: end;
+  }
+
+  .bio-quick-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .bio-section-hero__actions,
+  .bio-doc-actions,
+  .latest-section-surface__intro-head,
+  .bio-cover__actions,
+  .section-entry-card__body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .latest-section-surface__jump,
+  .bio-section-hero__primary,
+  .bio-section-hero__secondary,
+  .bio-doc-actions__primary,
+  .bio-doc-actions__secondary,
+  .bio-cover__primary,
+  .bio-cover__secondary,
+  .section-entry-card__button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bio-cover,
+  .bio-cover__primary,
+  .bio-cover__secondary,
+  .bio-quick-card,
+  .section-entry-card,
+  .section-entry-card__button,
+  .latest-section-surface {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+</style>
+
+
+{{ "<!-- ENTERING partial seo-schema.html -->" | safeHTML }}
+
+{{/* --- Publisher Block --- */}}
+{{- $publisher := "" -}}
+{{- with .Site.Params.publisher -}}
+  {{- $p := . -}}
+  {{- $type := .type | default "Organization" -}}
+  {{- $name := .name | default $.Site.Title -}}
+
+  {{- $publisherData := dict "@type" $type "name" $name -}}
+  {{- if eq $type "Organization" -}}
+    {{- with .logo -}}
+      {{- $logoData := dict "@type" "ImageObject" "url" ( . | absURL ) -}}
+      {{- $publisherData = merge $publisherData (dict "logo" $logoData) -}}
+    {{- end -}}
+  {{- else if eq $type "Person" -}}
+    {{- with .url -}}
+      {{- $publisherData = merge $publisherData (dict "url" ( . | absURL )) -}}
+    {{- end -}}
+    {{- with .sameAs -}}
+      {{- $publisherData = merge $publisherData (dict "sameAs" .) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $publisher = $publisherData -}}
+{{- end -}}
+
+
+{{/* --- Author Block --- */}}
+{{- $author := "" -}}
+{{/* 1. Check for single author in page Front Matter */}}
+{{- $author_id := .Params.author -}}
+{{- if and $author_id (index .Site.Data.authors $author_id) -}}
+  {{- $authorData := index .Site.Data.authors $author_id -}}
+  {{- $author = dict "@type" "Person" "name" $authorData.name -}}
+  {{- with $authorData.website -}}
+    {{- $author = merge $author (dict "url" ( . | absURL )) -}}
+  {{- end -}}
+{{/* 2. Fallback to global author in hugo.yaml `params` */}}
+{{- else if .Site.Params.author -}}
+  {{- $author = dict "@type" "Person" "name" .Site.Params.author.name -}}
+  {{- with .Site.Params.author.website -}}
+    {{- $author = merge $author (dict "url" ( . | absURL )) -}}
+  {{- end -}}
+{{/* 3. Fallback to global author in hugo.yaml `author` */}}
+{{- else if .Site.Author.name -}}
+  {{- $author = dict "@type" "Person" "name" .Site.Author.name -}}
+  {{- with .Site.Author.website -}}
+    {{- $author = merge $author (dict "url" ( . | absURL )) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if .IsHome -}}
+  {{/* --- WebSite Schema --- */}}
+  {{- $schema := dict "@context" "https://schema.org" "@type" "WebSite" -}}
+  {{- $schema = merge $schema (dict "url" .Site.BaseURL "name" .Site.Title) -}}
+  {{- with .Site.Params.description -}}
+    {{- $schema = merge $schema (dict "description" .) -}}
+  {{- end -}}
+  {{- with $publisher -}}
+    {{- $schema = merge $schema (dict "publisher" .) -}}
+  {{- end -}}
+<script type="application/ld+json">
+{{ $schema }}
+</script>
+
+{{- else if .IsPage -}}
+  {{/* --- Article/TechArticle Schema --- */}}
+  {{- $iso8601 := "2006-01-02T15:04:05-07:00" -}}
+  {{- $schema := dict "@context" "https://schema.org" "@type" "TechArticle" -}}
+  {{- $schema = merge $schema (dict
+      "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+      "headline" .Title
+      "url" .Permalink
+      "wordCount" .WordCount
+    ) -}}
+
+  {{- $docDesc := .Description | default "" -}}
+  {{- $siteParamDesc := .Site.Params.description | default "" -}}
+  {{- $description := or $docDesc $siteParamDesc -}}
+  {{- with $description -}}
+    {{- $schema = merge $schema (dict "description" .) -}}
+  {{- end -}}
+
+  {{- $image := "" -}}
+  {{- if .Params.image.url -}}
+    {{- $image = .Params.image -}}
+  {{- else if .Site.Params.image.url -}}
+    {{- $image = .Site.Params.image -}}
+  {{- end -}}
+  {{- with $image -}}
+    {{- if ge .width 696 -}}
+      {{- $imageData := dict "@type" "ImageObject" "url" ( .url | absURL ) "width" .width "height" .height -}}
+      {{- $schema = merge $schema (dict "image" $imageData) -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- with .Type -}}
+    {{- $schema = merge $schema (dict "genre" .) -}}
+  {{- end -}}
+  {{- with .Params.tags -}}
+    {{- $schema = merge $schema (dict "keywords" (delimit . ", ")) -}}
+  {{- end -}}
+
+  {{- $published := .PublishDate | default .Date -}}
+  {{- if not $published.IsZero -}}
+    {{- $schema = merge $schema (dict "datePublished" ($published.Format $iso8601)) -}}
+  {{- end -}}
+  {{- with .Lastmod -}}
+    {{- if not .IsZero -}}
+      {{- $schema = merge $schema (dict "dateModified" (.Format $iso8601)) -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- with .Site.Copyright -}}
+    {{- $schema = merge $schema (dict "license" .) -}}
+  {{- end -}}
+
+  {{- with $publisher -}}
+    {{- $schema = merge $schema (dict "publisher" .) -}}
+  {{- end -}}
+  {{- with $author -}}
+    {{- $schema = merge $schema (dict "author" .) -}}
+  {{- end -}}
+
+<script type="application/ld+json">
+{{ $schema }}
+</script>
+
+{{- end }}
+{{ "<!-- LEAVING partial seo-schema.html -->" | safeHTML }}

@@ -1,0 +1,942 @@
+<section class="sleep-tool" data-sleep-recovery-tool>
+  <style>
+    .sleep-tool {
+      --sleep-ink: #12201f;
+      --sleep-muted: #5b6b68;
+      --sleep-line: rgba(18, 32, 31, .12);
+      --sleep-teal: #0f766e;
+      --sleep-green: #15803d;
+      --sleep-amber: #b45309;
+      --sleep-red: #b91c1c;
+      --sleep-bg: #f7fbf9;
+      --sleep-panel: #ffffff;
+      --sleep-soft: #e8f5f0;
+      color: var(--sleep-ink);
+      display: grid;
+      gap: 1rem;
+      margin: 1rem 0 2rem;
+    }
+
+    .sleep-tool * {
+      box-sizing: border-box;
+      letter-spacing: 0;
+    }
+
+    .sleep-tool a {
+      color: var(--sleep-teal);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .sleep-tool__hero,
+    .sleep-tool__panel,
+    .sleep-tool__result,
+    .sleep-tool__commerce,
+    .sleep-tool__notice {
+      border: 1px solid var(--sleep-line);
+      background: var(--sleep-panel);
+      border-radius: 8px;
+      box-shadow: 0 18px 46px -40px rgba(15, 23, 42, .35);
+    }
+
+    .sleep-tool__hero {
+      display: grid;
+      gap: 1rem;
+      padding: 1.2rem;
+      background:
+        linear-gradient(135deg, rgba(232, 245, 240, .95), rgba(255, 255, 255, .98)),
+        #fff;
+    }
+
+    .sleep-tool__eyebrow {
+      color: var(--sleep-teal);
+      font-size: .78rem;
+      font-weight: 800;
+    }
+
+    .sleep-tool__title {
+      margin: 0;
+      max-width: 760px;
+      font-size: 2rem;
+      line-height: 1.08;
+      font-weight: 850;
+    }
+
+    .sleep-tool__lead {
+      max-width: 760px;
+      margin: 0;
+      color: var(--sleep-muted);
+      line-height: 1.8;
+    }
+
+    .sleep-tool__hero-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .75rem;
+    }
+
+    .sleep-tool__fact {
+      min-height: 92px;
+      border: 1px solid rgba(15, 118, 110, .14);
+      background: rgba(255, 255, 255, .72);
+      border-radius: 8px;
+      padding: .85rem;
+    }
+
+    .sleep-tool__fact strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: .28rem;
+    }
+
+    .sleep-tool__fact span {
+      color: var(--sleep-muted);
+      font-size: .88rem;
+      line-height: 1.55;
+    }
+
+    .sleep-tool__grid {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(320px, 1.05fr);
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .sleep-tool__panel,
+    .sleep-tool__result,
+    .sleep-tool__commerce,
+    .sleep-tool__notice {
+      padding: 1rem;
+    }
+
+    .sleep-tool__panel-title,
+    .sleep-tool__result-title,
+    .sleep-tool__commerce-title {
+      margin: 0 0 .75rem;
+      font-size: 1.12rem;
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    .sleep-tool__fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .72rem;
+    }
+
+    .sleep-field {
+      display: grid;
+      gap: .34rem;
+      min-width: 0;
+    }
+
+    .sleep-field label,
+    .sleep-check__label {
+      color: #1f3431;
+      font-size: .86rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .sleep-field small {
+      color: var(--sleep-muted);
+      font-size: .76rem;
+      line-height: 1.45;
+    }
+
+    .sleep-field input[type="number"] {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--sleep-line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--sleep-ink);
+      padding: .55rem .65rem;
+      font-size: .96rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sleep-field input[type="number"]:focus,
+    .sleep-tool textarea:focus {
+      border-color: rgba(15, 118, 110, .55);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, .12);
+      outline: none;
+    }
+
+    .sleep-tool__checks {
+      display: grid;
+      gap: .55rem;
+      margin-top: .9rem;
+      padding-top: .9rem;
+      border-top: 1px solid var(--sleep-line);
+    }
+
+    .sleep-check {
+      display: flex;
+      gap: .55rem;
+      align-items: flex-start;
+      min-height: 34px;
+    }
+
+    .sleep-check input {
+      width: 18px;
+      height: 18px;
+      margin-top: .12rem;
+      accent-color: var(--sleep-teal);
+      flex: 0 0 auto;
+    }
+
+    .sleep-tool__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      margin-top: 1rem;
+    }
+
+    .sleep-button {
+      appearance: none;
+      border: 1px solid var(--sleep-line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--sleep-ink);
+      cursor: pointer;
+      font-weight: 800;
+      min-height: 42px;
+      padding: .62rem .85rem;
+      transition: background-color .16s ease, color .16s ease, border-color .16s ease, transform .16s ease;
+    }
+
+    .sleep-button:hover {
+      border-color: rgba(15, 118, 110, .38);
+      transform: translateY(-1px);
+    }
+
+    .sleep-button--primary {
+      background: var(--sleep-teal);
+      border-color: var(--sleep-teal);
+      color: #fff;
+    }
+
+    .sleep-button--muted {
+      background: var(--sleep-soft);
+      border-color: rgba(15, 118, 110, .18);
+      color: #0f4a44;
+    }
+
+    .sleep-score {
+      display: grid;
+      grid-template-columns: 128px minmax(0, 1fr);
+      gap: 1rem;
+      align-items: center;
+      padding: .9rem;
+      border: 1px solid rgba(15, 118, 110, .14);
+      background: linear-gradient(180deg, rgba(247, 251, 249, .96), rgba(255, 255, 255, .96));
+      border-radius: 8px;
+    }
+
+    .sleep-score__number {
+      display: grid;
+      place-items: center;
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      border: 10px solid rgba(15, 118, 110, .16);
+      background: #fff;
+      font-size: 2.15rem;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      color: var(--sleep-teal);
+    }
+
+    .sleep-score__copy {
+      display: grid;
+      gap: .35rem;
+      min-width: 0;
+    }
+
+    .sleep-score__status {
+      margin: 0;
+      font-size: 1.24rem;
+      line-height: 1.2;
+      font-weight: 850;
+    }
+
+    .sleep-score__age {
+      margin: 0;
+      color: var(--sleep-muted);
+      line-height: 1.65;
+    }
+
+    .sleep-module-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .72rem;
+      margin-top: .85rem;
+    }
+
+    .sleep-module {
+      min-height: 126px;
+      border: 1px solid var(--sleep-line);
+      border-radius: 8px;
+      padding: .75rem;
+      background: #fff;
+    }
+
+    .sleep-module__top {
+      display: flex;
+      justify-content: space-between;
+      gap: .7rem;
+      align-items: baseline;
+    }
+
+    .sleep-module__name {
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .sleep-module__score {
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      color: var(--sleep-teal);
+    }
+
+    .sleep-bar {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(18, 32, 31, .09);
+      margin: .56rem 0 .5rem;
+    }
+
+    .sleep-bar span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--sleep-teal);
+      transition: width .22s ease;
+    }
+
+    .sleep-module__note {
+      color: var(--sleep-muted);
+      font-size: .82rem;
+      line-height: 1.58;
+      margin: 0;
+    }
+
+    .sleep-plan {
+      display: grid;
+      gap: .62rem;
+      margin: .85rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .sleep-plan li {
+      border-left: 3px solid rgba(15, 118, 110, .36);
+      background: var(--sleep-bg);
+      border-radius: 8px;
+      color: #243b37;
+      line-height: 1.7;
+      padding: .7rem .8rem;
+    }
+
+    .sleep-tool textarea {
+      width: 100%;
+      min-height: 230px;
+      margin-top: .85rem;
+      resize: vertical;
+      border: 1px solid var(--sleep-line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--sleep-ink);
+      padding: .8rem;
+      line-height: 1.7;
+      font-size: .9rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    .sleep-tool__commerce-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: .72rem;
+    }
+
+    .sleep-offer {
+      border: 1px solid var(--sleep-line);
+      border-radius: 8px;
+      background: #fff;
+      padding: .85rem;
+      min-height: 144px;
+    }
+
+    .sleep-offer strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: .42rem;
+    }
+
+    .sleep-offer span {
+      display: block;
+      color: var(--sleep-muted);
+      font-size: .86rem;
+      line-height: 1.62;
+    }
+
+    .sleep-tool__notice {
+      color: var(--sleep-muted);
+      line-height: 1.75;
+      background: #fbfbf8;
+    }
+
+    .sleep-tool__notice strong {
+      color: var(--sleep-ink);
+    }
+
+    html.dark .sleep-tool {
+      --sleep-ink: #edfdf8;
+      --sleep-muted: #bdd3ce;
+      --sleep-line: rgba(237, 253, 248, .14);
+      --sleep-bg: rgba(15, 118, 110, .1);
+      --sleep-panel: #121a1a;
+      --sleep-soft: rgba(15, 118, 110, .18);
+    }
+
+    html.dark .sleep-tool__hero,
+    html.dark .sleep-tool__panel,
+    html.dark .sleep-tool__result,
+    html.dark .sleep-tool__commerce,
+    html.dark .sleep-tool__notice,
+    html.dark .sleep-module,
+    html.dark .sleep-offer,
+    html.dark .sleep-field input[type="number"],
+    html.dark .sleep-tool textarea,
+    html.dark .sleep-score,
+    html.dark .sleep-score__number {
+      background: #121a1a;
+      color: var(--sleep-ink);
+    }
+
+    html.dark .sleep-tool__hero {
+      background: linear-gradient(135deg, rgba(15, 118, 110, .18), rgba(18, 26, 26, .98));
+    }
+
+    html.dark .sleep-tool__fact,
+    html.dark .sleep-plan li {
+      background: rgba(255, 255, 255, .04);
+    }
+
+    html.dark .sleep-field label,
+    html.dark .sleep-check__label,
+    html.dark .sleep-plan li {
+      color: var(--sleep-ink);
+    }
+
+    @media (max-width: 980px) {
+      .sleep-tool__grid,
+      .sleep-tool__hero-grid,
+      .sleep-tool__commerce-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .sleep-tool__title {
+        font-size: 1.62rem;
+      }
+
+      .sleep-tool__fields,
+      .sleep-module-grid,
+      .sleep-score {
+        grid-template-columns: 1fr;
+      }
+
+      .sleep-score__number {
+        width: 112px;
+        height: 112px;
+      }
+
+      .sleep-button {
+        width: 100%;
+      }
+    }
+
+    @media print {
+      .sleep-tool__panel,
+      .sleep-tool__commerce,
+      .sleep-tool__actions,
+      .sleep-tool__notice {
+        display: none !important;
+      }
+
+      .sleep-tool__result {
+        box-shadow: none;
+        border-color: #222;
+      }
+    }
+  </style>
+
+  <div class="sleep-tool__hero">
+    <div>
+      <div class="sleep-tool__eyebrow">基于 7 天平均数据的非医疗观察工具</div>
+      <h2 class="sleep-tool__title">把手表和睡眠 App 里的数据，变成一份能看懂、能行动、能付费交付的恢复报告。</h2>
+      <p class="sleep-tool__lead">输入睡眠时长、效率、深睡、REM、HRV、静息心率和作息波动，工具会生成睡眠恢复分、恢复年龄画像、主要拖累项和 7 天行动计划。所有计算只在浏览器本地完成。</p>
+    </div>
+    <div class="sleep-tool__hero-grid" aria-label="工具价值">
+      <div class="sleep-tool__fact">
+        <strong>5 分钟</strong>
+        <span>用 Apple Watch、Oura、Garmin、小米手环或睡眠 App 的 7 天平均值即可完成。</span>
+      </div>
+      <div class="sleep-tool__fact">
+        <strong>低风险</strong>
+        <span>只做睡眠恢复状态观察，不做疾病判断、治疗建议或真实生物年龄检测。</span>
+      </div>
+      <div class="sleep-tool__fact">
+        <strong>可变现</strong>
+        <span>免费自测引流，付费卖详细解读报告、打卡群和非医疗数据复盘。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sleep-tool__grid">
+    <form class="sleep-tool__panel" data-sleep-form>
+      <h3 class="sleep-tool__panel-title">输入 7 天平均值</h3>
+      <div class="sleep-tool__fields">
+        <div class="sleep-field">
+          <label for="sleep-age">实际年龄</label>
+          <input id="sleep-age" name="actualAge" data-field type="number" min="18" max="90" step="1" value="35">
+          <small>用于生成“恢复年龄画像”，不是医学年龄。</small>
+        </div>
+        <div class="sleep-field">
+          <label for="sleep-duration">总睡眠时长，小时</label>
+          <input id="sleep-duration" name="duration" data-field type="number" min="3" max="10" step="0.1" value="7.1">
+          <small>看 7 天平均，不要只看某一天。</small>
+        </div>
+        <div class="sleep-field">
+          <label for="sleep-efficiency">睡眠效率，百分比</label>
+          <input id="sleep-efficiency" name="efficiency" data-field type="number" min="55" max="100" step="1" value="86">
+          <small>多数 App 会显示，越接近 90% 越稳。</small>
+        </div>
+        <div class="sleep-field">
+          <label for="sleep-deep">深睡时长，分钟</label>
+          <input id="sleep-deep" name="deep" data-field type="number" min="0" max="220" step="5" value="75">
+          <small>设备估算有误差，只看趋势。</small>
+        </div>
+        <div class="sleep-field">
+          <label for="sleep-rem">REM 时长，分钟</label>
+          <input id="sleep-rem" name="rem" data-field type="number" min="0" max="240" step="5" value="90">
+          <small>长期偏低时优先看睡眠总量和压力。</small>
+        </div>
+        <div class="sleep-field">
+          <label for="sleep-awakenings">夜间醒来次数</label>
+          <input id="sleep-awakenings" name="awakenings" data-field type="number" min="0" max="12" step="1" value="2">
+          <small>以明显醒来为准，不必纠结短暂微醒。</small>
+        </div>
+        <div class="sleep-field">
+          <label for="sleep-hrv">HRV，毫秒</label>
+          <input id="sleep-hrv" name="hrv" data-field type="number" min="8" max="160" step="1" value="45">
+          <small>最好和自己过去 30 天均值对比。</small>
+        </div>
+        <div class="sleep-field">
+          <label for="sleep-rhr">静息心率，bpm</label>
+          <input id="sleep-rhr" name="rhr" data-field type="number" min="42" max="105" step="1" value="62">
+          <small>连续升高通常提示恢复压力上升。</small>
+        </div>
+        <div class="sleep-field">
+          <label for="sleep-variance">入睡时间波动，分钟</label>
+          <input id="sleep-variance" name="bedVariance" data-field type="number" min="0" max="240" step="5" value="50">
+          <small>最晚和最早入睡时间的平均波动。</small>
+        </div>
+        <div class="sleep-field">
+          <label for="sleep-stress">主观压力，1 到 10</label>
+          <input id="sleep-stress" name="stress" data-field type="number" min="1" max="10" step="1" value="5">
+          <small>1 很放松，10 压力很大。</small>
+        </div>
+      </div>
+
+      <div class="sleep-tool__checks" aria-label="本周习惯">
+        <div class="sleep-check">
+          <input id="habit-screen" name="lateScreen" data-habit type="checkbox" checked>
+          <div>
+            <label class="sleep-check__label" for="habit-screen">睡前 60 分钟仍长时间刷屏或工作</label>
+          </div>
+        </div>
+        <div class="sleep-check">
+          <input id="habit-caffeine" name="lateCaffeine" data-habit type="checkbox">
+          <div>
+            <label class="sleep-check__label" for="habit-caffeine">下午 3 点后摄入咖啡因</label>
+          </div>
+        </div>
+        <div class="sleep-check">
+          <input id="habit-alcohol" name="alcohol" data-habit type="checkbox">
+          <div>
+            <label class="sleep-check__label" for="habit-alcohol">本周有饮酒后入睡</label>
+          </div>
+        </div>
+        <div class="sleep-check">
+          <input id="habit-late-meal" name="lateMeal" data-habit type="checkbox">
+          <div>
+            <label class="sleep-check__label" for="habit-late-meal">睡前 2 小时内吃得较饱</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="sleep-tool__actions">
+        <button class="sleep-button sleep-button--primary" type="button" data-action="calculate">生成报告</button>
+        <button class="sleep-button sleep-button--muted" type="button" data-action="copy">复制报告</button>
+        <button class="sleep-button" type="button" data-action="print">打印或导出 PDF</button>
+        <button class="sleep-button" type="button" data-action="reset">恢复示例</button>
+      </div>
+    </form>
+
+    <div class="sleep-tool__result" aria-live="polite">
+      <h3 class="sleep-tool__result-title">本周睡眠恢复报告</h3>
+      <div class="sleep-score">
+        <div class="sleep-score__number" data-score>0</div>
+        <div class="sleep-score__copy">
+          <p class="sleep-score__status" data-status>等待生成</p>
+          <p class="sleep-score__age" data-age-line>输入数据后生成恢复年龄画像。</p>
+        </div>
+      </div>
+
+      <div class="sleep-module-grid">
+        <div class="sleep-module">
+          <div class="sleep-module__top">
+            <span class="sleep-module__name">睡眠结构</span>
+            <span class="sleep-module__score" data-module-score="architecture">0</span>
+          </div>
+          <div class="sleep-bar"><span data-module-bar="architecture"></span></div>
+          <p class="sleep-module__note" data-module-note="architecture">总时长、效率、深睡和 REM 的综合状态。</p>
+        </div>
+        <div class="sleep-module">
+          <div class="sleep-module__top">
+            <span class="sleep-module__name">自主神经恢复</span>
+            <span class="sleep-module__score" data-module-score="autonomic">0</span>
+          </div>
+          <div class="sleep-bar"><span data-module-bar="autonomic"></span></div>
+          <p class="sleep-module__note" data-module-note="autonomic">用 HRV 和静息心率观察恢复压力。</p>
+        </div>
+        <div class="sleep-module">
+          <div class="sleep-module__top">
+            <span class="sleep-module__name">作息节律</span>
+            <span class="sleep-module__score" data-module-score="rhythm">0</span>
+          </div>
+          <div class="sleep-bar"><span data-module-bar="rhythm"></span></div>
+          <p class="sleep-module__note" data-module-note="rhythm">入睡时间波动和夜间醒来次数。</p>
+        </div>
+        <div class="sleep-module">
+          <div class="sleep-module__top">
+            <span class="sleep-module__name">行为摩擦</span>
+            <span class="sleep-module__score" data-module-score="behavior">0</span>
+          </div>
+          <div class="sleep-bar"><span data-module-bar="behavior"></span></div>
+          <p class="sleep-module__note" data-module-note="behavior">压力、刷屏、咖啡因、饮酒和晚餐。</p>
+        </div>
+      </div>
+
+      <ul class="sleep-plan" data-plan></ul>
+      <textarea data-report readonly aria-label="可复制的睡眠恢复报告"></textarea>
+    </div>
+  </div>
+
+  <div class="sleep-tool__commerce">
+    <h3 class="sleep-tool__commerce-title">这个工具可以怎么变现</h3>
+    <div class="sleep-tool__commerce-grid">
+      <div class="sleep-offer">
+        <strong>免费自测</strong>
+        <span>网页直接开放，靠“恢复年龄画像”和报告复制制造传播点。</span>
+      </div>
+      <div class="sleep-offer">
+        <strong>19.9 元报告</strong>
+        <span>用户提交截图或数据，AI 生成更完整的 1 页 PDF 解读和 7 天计划。</span>
+      </div>
+      <div class="sleep-offer">
+        <strong>49 元打卡群</strong>
+        <span>每天填睡眠数据，群内给非医疗的习惯提醒、复盘模板和排行榜。</span>
+      </div>
+      <div class="sleep-offer">
+        <strong>199 元复盘</strong>
+        <span>人工查看 14 到 30 天趋势，输出作息、压力、咖啡因和运动调整建议。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sleep-tool__notice">
+    <strong>声明：</strong>本工具仅用于个人健康数据记录、科普和习惯观察，不用于诊断、治疗、用药、判断睡眠障碍或评估真实生物年龄。HRV、深睡、REM 等指标受设备算法影响很大，请优先看同一设备上的长期趋势。若你长期睡不着、打鼾憋醒、白天严重嗜睡、情绪明显异常或有其他不适，请及时咨询合格医生。
+  </div>
+
+  <script>
+    (function () {
+      if (window.__sleepRecoveryToolLoaded) return;
+      window.__sleepRecoveryToolLoaded = true;
+
+      const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+      const round = (value) => Math.round(value);
+      const scoreLinear = (value, low, high) => clamp(((value - low) / (high - low)) * 100, 0, 100);
+      const scoreLowerBetter = (value, good, poor) => clamp(100 - ((value - good) / (poor - good)) * 100, 0, 100);
+      const scoreBand = (value, lowFail, idealLow, idealHigh, highFail) => {
+        if (value >= idealLow && value <= idealHigh) return 100;
+        if (value < idealLow) return clamp(35 + ((value - lowFail) / (idealLow - lowFail)) * 65, 0, 100);
+        return clamp(100 - ((value - idealHigh) / (highFail - idealHigh)) * 65, 35, 100);
+      };
+
+      const defaults = {
+        actualAge: 35,
+        duration: 7.1,
+        efficiency: 86,
+        deep: 75,
+        rem: 90,
+        awakenings: 2,
+        hrv: 45,
+        rhr: 62,
+        bedVariance: 50,
+        stress: 5,
+        habits: {
+          lateScreen: true,
+          lateCaffeine: false,
+          alcohol: false,
+          lateMeal: false
+        }
+      };
+
+      const labels = {
+        architecture: "睡眠结构",
+        autonomic: "自主神经恢复",
+        rhythm: "作息节律",
+        behavior: "行为摩擦"
+      };
+
+      const habitText = {
+        lateScreen: "睡前刷屏或工作",
+        lateCaffeine: "下午 3 点后咖啡因",
+        alcohol: "饮酒后入睡",
+        lateMeal: "睡前吃得较饱"
+      };
+
+      const actionMap = {
+        architecture: [
+          "把“可睡窗口”先拉到 7.5 小时，不追求立刻睡着，只保证躺下和起床的边界。",
+          "卧室保持暗、凉、安静，先连续 3 晚观察睡眠效率是否提高。",
+          "深睡或 REM 偏少时，不单独追某个阶段，优先补总睡眠时长和减少夜间醒来。"
+        ],
+        autonomic: [
+          "连续 7 天记录 HRV 和静息心率，只和自己的 30 天均值比，不和别人比。",
+          "下午 3 点后暂停咖啡因，晚上只做低强度散步、拉伸或呼吸放松。",
+          "如果静息心率连续升高，先减训练强度和酒精，再看 3 天趋势。"
+        ],
+        rhythm: [
+          "固定起床时间，周末最多晚起 60 分钟，让身体先有稳定锚点。",
+          "起床后 30 分钟内接触自然光 10 到 20 分钟，晚上减少强光。",
+          "把入睡时间波动压到 45 分钟内，比追求某个完美入睡点更现实。"
+        ],
+        behavior: [
+          "睡前 60 分钟设置离线窗口，把工作、短视频和争论性内容提前结束。",
+          "晚餐尽量放到睡前 3 小时以前，夜间饿时选择少量、简单、低刺激食物。",
+          "压力高的晚上只做一件事：写下明天前三件事，降低入睡前的未完成感。"
+        ]
+      };
+
+      const statusFor = (score) => {
+        if (score >= 85) return "恢复状态很稳，可以继续保持";
+        if (score >= 72) return "整体可用，有一两个拖累项";
+        if (score >= 58) return "恢复偏紧，先修复节律和行为";
+        return "恢复压力明显，先做低风险调整";
+      };
+
+      const noteFor = (key, values, score) => {
+        if (key === "architecture") {
+          if (values.duration < 6.5) return "总睡眠时长偏少，是最容易先修的基础项。";
+          if (values.efficiency < 80) return "睡眠效率偏低，可能有躺床过久或夜醒偏多。";
+          return "睡眠结构基本可用，继续看 7 天趋势。";
+        }
+        if (key === "autonomic") {
+          if (values.rhr >= 72) return "静息心率偏高，恢复压力可能在上升。";
+          if (values.hrv < 30) return "HRV 偏低，建议和自己的长期均值对比。";
+          return "自主神经恢复信号相对平稳。";
+        }
+        if (key === "rhythm") {
+          if (values.bedVariance > 75) return "入睡时间波动偏大，固定起床时间优先级最高。";
+          if (values.awakenings >= 4) return "夜间醒来次数偏多，先排查光线、酒精、晚餐和压力。";
+          return "节律稳定度还不错，可以继续压小波动。";
+        }
+        if (score < 65) return "本周行为摩擦较多，先减少睡前刺激。";
+        return "行为侧没有明显拖后腿，继续保持。";
+      };
+
+      const getValues = (root) => {
+        const values = {};
+        root.querySelectorAll("[data-field]").forEach((input) => {
+          values[input.name] = Number(input.value || 0);
+        });
+        values.habits = {};
+        root.querySelectorAll("[data-habit]").forEach((input) => {
+          values.habits[input.name] = input.checked;
+        });
+        return values;
+      };
+
+      const setValues = (root, values) => {
+        root.querySelectorAll("[data-field]").forEach((input) => {
+          input.value = values[input.name];
+        });
+        root.querySelectorAll("[data-habit]").forEach((input) => {
+          input.checked = Boolean(values.habits[input.name]);
+        });
+      };
+
+      const calculate = (values) => {
+        const durationScore = scoreBand(values.duration, 4.5, 7, 8.4, 10);
+        const efficiencyScore = scoreLinear(values.efficiency, 70, 92);
+        const deepScore = scoreBand(values.deep, 20, 60, 115, 180);
+        const remScore = scoreBand(values.rem, 35, 75, 125, 190);
+        const awakeningScore = scoreLowerBetter(values.awakenings, 1, 7);
+        const hrvScore = scoreLinear(values.hrv, 20, 70);
+        const rhrScore = scoreLowerBetter(values.rhr, 55, 85);
+        const varianceScore = scoreLowerBetter(values.bedVariance, 25, 135);
+        const habitCount = Object.values(values.habits).filter(Boolean).length;
+        const behaviorScore = clamp(100 - (values.stress - 1) * 7.5 - habitCount * 7, 15, 100);
+
+        const architecture = durationScore * .3 + efficiencyScore * .3 + deepScore * .2 + remScore * .2;
+        const autonomic = hrvScore * .55 + rhrScore * .45;
+        const rhythm = varianceScore * .62 + awakeningScore * .38;
+        const behavior = behaviorScore;
+        const overall = architecture * .38 + autonomic * .28 + rhythm * .2 + behavior * .14;
+        const offset = round(clamp((72 - overall) / 4 + habitCount * .45, -8, 12));
+        const recoveryAge = clamp(round(values.actualAge + offset), 18, 99);
+
+        return {
+          overall: round(overall),
+          offset,
+          recoveryAge,
+          modules: {
+            architecture: round(architecture),
+            autonomic: round(autonomic),
+            rhythm: round(rhythm),
+            behavior: round(behavior)
+          },
+          habitCount
+        };
+      };
+
+      const buildPlan = (values, result) => {
+        const ordered = Object.entries(result.modules).sort((a, b) => a[1] - b[1]).map(([key]) => key);
+        const plan = [];
+        ordered.slice(0, 2).forEach((key) => {
+          plan.push(actionMap[key][0]);
+          plan.push(actionMap[key][1]);
+        });
+        Object.entries(values.habits).forEach(([key, active]) => {
+          if (active && key === "lateScreen") plan.push("今晚先把睡前刷屏减少 30 分钟，比完全戒掉更容易坚持。");
+          if (active && key === "lateCaffeine") plan.push("把最后一杯咖啡或茶提前到 14:30 前，连续试 7 天。");
+          if (active && key === "alcohol") plan.push("至少做 3 个无酒精入睡夜，观察静息心率和夜醒变化。");
+          if (active && key === "lateMeal") plan.push("把主餐提前，睡前只保留轻量加餐或温水。");
+        });
+        return [...new Set(plan)].slice(0, 5);
+      };
+
+      const buildReport = (values, result, plan) => {
+        const weak = Object.entries(result.modules).sort((a, b) => a[1] - b[1]).slice(0, 2).map(([key, score]) => `${labels[key]} ${score} 分`).join("、");
+        const strong = Object.entries(result.modules).sort((a, b) => b[1] - a[1])[0];
+        const habitList = Object.entries(values.habits).filter(([, active]) => active).map(([key]) => habitText[key]);
+        const ageLine = result.offset === 0
+          ? `恢复年龄画像约 ${result.recoveryAge} 岁，和实际年龄接近。`
+          : result.offset > 0
+            ? `恢复年龄画像约 ${result.recoveryAge} 岁，比实际年龄偏老 ${result.offset} 岁。`
+            : `恢复年龄画像约 ${result.recoveryAge} 岁，比实际年龄年轻 ${Math.abs(result.offset)} 岁。`;
+
+        return [
+          "【睡眠恢复年龄观察报告】",
+          `生成时间：${new Date().toLocaleString("zh-CN")}`,
+          "",
+          `本周睡眠恢复分：${result.overall}/100`,
+          `状态判断：${statusFor(result.overall)}`,
+          ageLine,
+          "",
+          "四个模块：",
+          `- 睡眠结构：${result.modules.architecture}/100`,
+          `- 自主神经恢复：${result.modules.autonomic}/100`,
+          `- 作息节律：${result.modules.rhythm}/100`,
+          `- 行为摩擦：${result.modules.behavior}/100`,
+          "",
+          `当前强项：${labels[strong[0]]} ${strong[1]} 分`,
+          `优先修复：${weak}`,
+          `本周行为摩擦：${habitList.length ? habitList.join("、") : "未勾选明显摩擦项"}`,
+          "",
+          "接下来 7 天只做这些：",
+          ...plan.map((item, index) => `${index + 1}. ${item}`),
+          "",
+          "声明：这是一份非医疗的睡眠数据观察报告，不用于诊断、治疗、用药或判断真实生物年龄。"
+        ].join("\n");
+      };
+
+      const render = (root) => {
+        const values = getValues(root);
+        const result = calculate(values);
+        const plan = buildPlan(values, result);
+
+        root.querySelector("[data-score]").textContent = result.overall;
+        root.querySelector("[data-status]").textContent = statusFor(result.overall);
+
+        const ageText = result.offset === 0
+          ? `恢复年龄画像约 ${result.recoveryAge} 岁，和实际年龄接近。`
+          : result.offset > 0
+            ? `恢复年龄画像约 ${result.recoveryAge} 岁，比实际年龄偏老 ${result.offset} 岁。`
+            : `恢复年龄画像约 ${result.recoveryAge} 岁，比实际年龄年轻 ${Math.abs(result.offset)} 岁。`;
+        root.querySelector("[data-age-line]").textContent = `${ageText} 这是一个睡眠恢复状态比喻，不是医学结论。`;
+
+        Object.entries(result.modules).forEach(([key, score]) => {
+          root.querySelector(`[data-module-score="${key}"]`).textContent = score;
+          root.querySelector(`[data-module-bar="${key}"]`).style.width = `${score}%`;
+          root.querySelector(`[data-module-note="${key}"]`).textContent = noteFor(key, values, score);
+        });
+
+        const planNode = root.querySelector("[data-plan]");
+        planNode.innerHTML = "";
+        plan.forEach((item) => {
+          const li = document.createElement("li");
+          li.textContent = item;
+          planNode.appendChild(li);
+        });
+
+        root.querySelector("[data-report]").value = buildReport(values, result, plan);
+
+        try {
+          localStorage.setItem("sleepRecoveryAgeInputsV1", JSON.stringify(values));
+        } catch (error) {
+          /* localStorage may be unavailable in private contexts. */
+        }
+      };
+
+      const copyReport = async (root) => {
+        const report = root.querySelector("[data-report]");
+        try {
+          await navigator.clipboard.writeText(report.value);
+        } catch (error) {
+          report.focus();
+          report.select();
+          document.execCommand("copy");
+        }
+      };
+
+      document.querySelectorAll("[data-sleep-recovery-tool]").forEach((root) => {
+        try {
+          const saved = JSON.parse(localStorage.getItem("sleepRecoveryAgeInputsV1") || "null");
+          setValues(root, saved || defaults);
+        } catch (error) {
+          setValues(root, defaults);
+        }
+
+        root.addEventListener("input", () => render(root));
+        root.addEventListener("change", () => render(root));
+        root.querySelector('[data-action="calculate"]').addEventListener("click", () => render(root));
+        root.querySelector('[data-action="copy"]').addEventListener("click", () => copyReport(root));
+        root.querySelector('[data-action="print"]').addEventListener("click", () => window.print());
+        root.querySelector('[data-action="reset"]').addEventListener("click", () => {
+          setValues(root, defaults);
+          render(root);
+        });
+        render(root);
+      });
+    })();
+  </script>
+</section>

@@ -1,0 +1,41 @@
+{{- $pageContext := . -}}
+{{- if .context -}}
+  {{- $pageContext = .context -}}
+{{- end -}}
+
+<div class="footer-wrapper">
+  <div class="footer-container">
+    <ul class="footer-links">
+      <li><a href="{{ "/" | relLangURL }}">睡眠恢复年龄</a></li>
+      <li><a href="{{ "/opportunity" | relLangURL }}">商机日报</a></li>
+      <li><a href="{{ "/project-opportunity" | relLangURL }}">项目雷达</a></li>
+      <li><a href="/about">关于</a></li>
+      <li><a href="https://news.aibioo.cn" target="_blank" rel="noopener">AI延续学日报</a></li>
+      <li><a href="https://yuyu.aivora.cn" target="_blank" rel="noopener">个人主页</a></li>
+      <li><a href="{{ "/tags" | relLangURL }}">标签</a></li>
+      {{- $pages := slice
+          (dict "id" "contact" "title" "联系我们")
+          (dict "id" "privacy-policy" "title" "隐私政策")
+          (dict "id" "terms-of-service" "title" "服务条款")
+      -}}
+
+      {{- range $page_dict := $pages }}
+        {{- $path := path.Join $pageContext.Language.Lang $page_dict.id -}}
+        {{- with site.GetPage $path -}}
+          <li><a href="{{ .RelPermalink }}">{{ $page_dict.title }}</a></li>
+        {{- end -}}
+      {{- end -}}
+    </ul>
+
+    <div class="footer-copyright">
+      {{- $copyright := printf "© %d %s" now.Year site.Title -}}
+      <a href="{{ "" | relLangURL }}">{{ $copyright | safeHTML }}</a>
+    </div>
+  </div>
+</div>
+
+{{- if site.Params.la51Id -}}
+<div style="max-width: 900px; margin: 1rem auto 2rem; padding: 0 1rem; text-align: center;">
+  <script id="LA-DATA-WIDGET" crossorigin="anonymous" charset="UTF-8" src="https://v6-widget.51.la/v6/{{- site.Params.la51Id | safeJS -}}/quote.js?theme=0&f=12"></script>
+</div>
+{{- end -}}

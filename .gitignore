@@ -1,0 +1,45 @@
+# Hugo output
+public/
+resources/
+.hugo_build.lock
+
+# Editor
+.vscode/
+
+# Local assistant and old migration leftovers
+.claude/
+.devcontainer/
+.gitpod.yml
+.pages.yml
+*.patch
+README.txt
+AI_PROJECT_GUIDE.md
+migrate-*.py
+migrate-*.ps1
+*.bat
+*.ps1
+/go.mod
+/go.sum
+/*.md
+!/README.md
+docs/images/
+netlify.toml
+static/ads.txt
+static/adview_*.js
+static/*verify*
+static/google*.html
+static/*.txt
+!static/llms.txt
+themes/hextra/.github/
+themes/hextra/docs/
+themes/hextra/examples/
+themes/hextra/images/
+themes/hextra/CLAUDE.md
+themes/hextra/README*
+themes/hextra/dev.toml
+themes/hextra/go.mod
+themes/hextra/hugo.toml
+themes/hextra/netlify.toml
+themes/hextra/package*.json
+themes/hextra/postcss.config.mjs
+themes/hextra/taskfile.yaml
