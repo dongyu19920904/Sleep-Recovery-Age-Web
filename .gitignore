@@ -46,3 +46,7 @@ themes/hextra/netlify.toml
 themes/hextra/package*.json
 themes/hextra/postcss.config.mjs
 themes/hextra/taskfile.yaml
+
+# Worker local state
+worker/.wrangler/
+worker/node_modules/
